@@ -1,0 +1,92 @@
+.errorbubble{
+	position:absolute;
+	border-radius:10px;
+	padding:10px 15px;;
+	border:2px solid #ccc;
+	background:black;
+	color:white;
+	box-shadow:rgba(0,0,0,0.15) 4px 4px 8px;
+	white-space: nowrap;
+
+}
+.hide{
+	display:none;
+}
+
+
+
+/**** Speech Bubble Icons *****/
+.bubble {
+  position: relative;
+}
+.bubble .bubbletext {
+	font-size:13px;
+	font-style: normal;
+	background: #000;
+	color: #FFF;
+	padding: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	border:2px solid black;
+	position: relative;
+}
+.bubble .down .point {
+	width: 0;
+	height: 0;
+	position: absolute;
+	top: 24px;
+	left: 12px;
+	display: block;
+	border-left: 20px solid #000; 
+	border-bottom: 20px solid #FFF; /* IE fix */
+	border-bottom: 20px solid rgba(0,0,0,0); 
+	overflow: hidden; /* IE fix */
+}
+.bubble .up .point {
+	width: 0;
+	height: 0;
+	position: absolute;
+	top: -33px;
+	left: 12px;
+	display: block;
+	border-left: 20px solid #000; 
+	border-top: 20px solid #FFF; /* IE fix */
+	border-top: 20px solid rgba(0,0,0,0); 
+	overflow: hidden; /* IE fix */
+}
+.bubble .point2 {
+	visibility:hidden;
+	z-index:99;
+	width: 0;
+	height: 0;
+	position: absolute;
+	top: 24px;
+	left: 14px;
+	display: block;
+	border-left: 13px solid #FFF; 
+	border-bottom: 14px solid #FFF; /* IE fix */
+	border-bottom: 14px solid rgba(0,0,0,0); 
+	overflow: hidden; /* IE fix */
+}
+.bubble .closer{
+	background:url('/images/btn_close_x.png');
+	display:block;
+	position:absolute;
+	width:42px;
+	height:42px;
+	z-index:99;
+	cursor:pointer;
+}
+
+.bubble .down .closer{
+	top:-33px;
+	right:-20px;
+}
+.bubble .up .closer{
+	top:6px;
+	right:-20px;
+}
+
+
+

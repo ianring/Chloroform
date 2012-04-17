@@ -1,0 +1,30 @@
+<script>
+jQuery(document).ready(function($) {
+	
+	$.fn.chloroform(
+		'addrule',
+		$('#efield1'),
+		{
+			'isfoo':function(){
+				var elem = arguments[0];
+				if ($(elem).val() != 'foo'){
+					return {'valid':false,'message':'this field is not foo'};
+				}
+				return {'valid':true};
+			}
+		}
+	);
+	
+	$('#button1').click(function(){
+		var isvalid = $.fn.chloroform('validate',$('#efield1'));
+		return false;
+	});
+	$('#example1').submit(function(){
+		return false;
+	});
+});
+</script>
+			<form id="example1">
+				<input type="text" id="efield1" value="abc" />will fail unless the value is "foo"
+			</form>
+			<input type="button" id="button1" value="this is not a submit button!"/> 

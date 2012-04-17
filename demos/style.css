@@ -1,0 +1,42 @@
+body,td{
+	font-family:arial;
+	font-size:14px;
+}
+td{
+	vertical-align:top;
+}
+th{
+	background:#eee;
+	padding:6px;
+}
+.columns{
+	overflow:hidden;
+}
+.leftcolumn{
+	float:left;
+	width:500px;
+}
+.rightcolumn{
+	float:left;
+	margin-left:40px;
+	height:100%;
+	overflow:auto;
+}
+textarea.codeexample{
+	width:500px;
+	height:auto;
+	border:1px dotted #888;
+}
+code{
+	white-space:pre;
+	padding:18px;
+}
+section{
+	margin-left:30px;
+}
+dt{
+	font-weight:bold;
+}
+dd{
+	margin-left:20px;
+}

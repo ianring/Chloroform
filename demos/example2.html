@@ -1,0 +1,76 @@
+<html>
+<head>
+<link href="../chloroform.css" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+
+<script src="/js/jquery/jquery-1.7.min.js"></script>
+<script src="../chloroform.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	$('#editform1').chloroform();
+	$('#editform2').chloroform();
+});
+</script>
+</head>
+<body>
+<h1>Chloroform</h1>
+
+
+<h2>two forms, validated separately</h2>
+<form id="editform1">
+	<table border="1">
+		<tr>
+			<th>data-validate attribute</th>
+			<th>Description</th>
+			<th>Field</th>
+		</tr>
+		<tr>
+			<td>required</td>
+			<td></td>
+			<td><input type="text" id="field1" data-validate="required" value="abc"/></td>
+		</tr>
+		<tr>
+			<td>required</td>
+			<td>must be checked</td>
+			<td><input type="checkbox" id="field2" data-validate="required" value="1"/></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td><input type="submit"/></td>
+		</tr>
+		
+	</table>
+</form>
+
+<form id="editform2">
+	<table border="1">
+		<tr>
+			<th>data-validate attribute</th>
+			<th>Description</th>
+			<th>Field</th>
+		</tr>
+		<tr>
+			<td>required</td>
+			<td></td>
+			<td><input type="text" id="field3" data-validate="required" value="abc"/></td>
+		</tr>
+		<tr>
+			<td>required</td>
+			<td>must be checked</td>
+			<td><input type="checkbox" id="field4" data-validate="required" value="1"/></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td><input type="submit"/></td>
+		</tr>
+		
+	</table>
+</form>
+
+		
+	</div>
+</div>
+</body>
+</html>
