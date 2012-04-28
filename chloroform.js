@@ -304,7 +304,7 @@
 					return not?{'valid':true}:{'valid':false,'message':'this field is required'};
 				}
 			}
-			if (elem.is(':text') || elem.is(':password')){
+			if (elem.is(':text') || elem.is(':password') || elem.is('textarea')){
 				if (elem.val() != ''){
 					return not?{'valid':false,'message':'this field is required'}:{'valid':true};
 				} else {
