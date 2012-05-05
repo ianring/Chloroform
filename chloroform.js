@@ -19,6 +19,7 @@
 				var settings = {
 					lang: 'en', 						// default language - i18n has not been implemented yet
 					validateDataAttr: 'data-validate', 	// name of the attribute which stores what validation rules to apply
+					scrollToBubble: true,
 					
 					// callback functions
 					onBeforeValidateAll:null,
@@ -273,8 +274,23 @@
 					'top':pos.top - plugin.bubblecontainer.outerHeight() - 20
 				});
 			}
-			
+			if (plugin.options.scrollToBubble){
+				methods.scrolltobubble();
+			}
 			return true;
+		},
+		scrolltobubble:function(){
+			// needs work.
+			
+			// check the top and bottom of the bubble and the element it's pointing to
+			// if either of them are above the frame, scroll to the min() of the two tops
+			//if either of them are below the frame, scroll to the max() of the two bottoms
+			
+			
+//			var bubbleoffset = plugin.bubblecontainer.offset();
+//			destination = bubbleoffset.top - 18;
+//			if (destination < 0) {destination = 0;}
+//			$(document).scrollTop(destination);
 		},
 		hidebubble: function(){
 			plugin.bubblecontainer.addClass('hide');
@@ -461,7 +477,6 @@
 			var not = arguments[1];
 			var str = arguments[2];
 			var val = elem.val();
-			var isnot = false;
 			
 			var regex = new RegExp(str);
 			var valid = regex.test(val);
@@ -469,6 +484,23 @@
 				return not?{'valid':false,'message':'this field is not valid'}:{'valid':true};
 			}
 			return not?{'valid':true}:{'valid':false,'message':'this field is not valid'};
+		},
+		'email':function(){
+			var elem = arguments[0];
+			var not = arguments[1];
+			var regex = new RegExp('[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}');
+			var val = elem.val();
+			var valid = regex.test(val);
+			if (valid){
+				return not?{'valid':false,'message':'please enter a valid email address'}:{'valid':true};
+			}
+			return not?{'valid':true}:{'valid':false,'message':'please enter a valid email address'};
+			// stub!!
+			return {'valid':true};
+		},
+		'url':function(){
+			// stub!!
+			return {'valid':true};
 		}
 	};
 		
