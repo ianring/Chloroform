@@ -286,6 +286,7 @@
 			// if either of them are above the frame, scroll to the min() of the two tops
 			//if either of them are below the frame, scroll to the max() of the two bottoms
 			
+			
 //			var bubbleoffset = plugin.bubblecontainer.offset();
 //			destination = bubbleoffset.top - 18;
 //			if (destination < 0) {destination = 0;}
