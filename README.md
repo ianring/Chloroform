@@ -9,7 +9,7 @@ Get Started
 
 See how easy it is to add form validation to your form elements. Just add an attribute named "data-validate", with special rule names in it like "required" and "length".
 
-For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
+For example, the field "myfield" below has a validation rule named "required". It must not be empty.
 
 <code>
 &lt;form id="myform"&gt;
