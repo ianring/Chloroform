@@ -137,6 +137,7 @@ This rule would be applied to this form element. Notice the parameter in square 
 
 
 You can customize how chloroform behaves by defining a whole bunch of useful options.
+
 	<script>
 		jQuery(document).ready(function($) {
 			$('#myform').chloroform({
