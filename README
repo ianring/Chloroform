@@ -4,6 +4,60 @@ About Chloroform
 Chloroform is the best jQuery-based client-side form validation plugin. It's simple to use, highly extensible, and efficient.
 
 
+Get Started
+===========
+
+See how easy it is to add form validation to your form elements. Just add an attribute named "data-validate", with special rule names in it like "required" and "length".
+
+For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
+
+<code>
+&lt;form id="myform"&gt;
+&lt;input id="myfield" type="text" value="" data-validate="required"/&gt;
+&lt;input type="submit" value="Save"/&gt;
+&lt;/form&gt;
+</code>
+
+Rules
+-----
+A "rule" is a criteria that the value of a form element must fulfil, before it can be deemed valid. 
+
+The rules are named. They have names like "numeric" and "required". To apply a rule to an HTML form element, you add it to the data-validate attribute, like the example above.
+
+Some rules are simple, like "email" (value just resemble an email address) or "required" (can't be empty).
+
+Other rules are more complex, and require parameters. For example, the "length" rule takes either one or two arguments. If only one is provided, it is the minimum length criteria. If two parameters are provided, then they are minimum and maximum. Parameters are expressed in square brackets, separated by a colon.
+
+For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
+
+<code>
+&lt;form id="myform"&gt;
+&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
+&lt;input type="submit" value="Save"/&gt;
+&lt;/form&gt;
+</code>
+
+
+Here are some built-in rules:
+
+required
+equals
+sameas
+alpha
+numeric
+integer
+max
+min
+between
+length
+choices
+contains
+regex
+email
+url
+
+
+
 Plugin Architecture
 ===================
 
@@ -37,8 +91,10 @@ When expressed as JSON, the data('rules') object will look like this:
 }
 </code>
 
-All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
 
+
+
+All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
 
 <h3>element.data('arguments')</h3>
 <section>
