@@ -1,22 +1,18 @@
-About Chloroform
-================
+# About Chloroform
 
 Chloroform is the best jQuery-based client-side form validation plugin. It's simple to use, highly extensible, and efficient.
 
 
-Get Started
-===========
+# Get Started
 
 See how easy it is to add form validation to your form elements. Just add an attribute named "data-validate", with special rule names in it like "required" and "length".
 
 For example, the field "myfield" below has a validation rule named "required". It must not be empty.
 
-<code>
-&lt;form id="myform"&gt;
-&lt;input id="myfield" type="text" value="" data-validate="required"/&gt;
-&lt;input type="submit" value="Save"/&gt;
-&lt;/form&gt;
-</code>
+	&lt;form id="myform"&gt;
+	&lt;input id="myfield" type="text" value="" data-validate="required"/&gt;
+	&lt;input type="submit" value="Save"/&gt;
+	&lt;/form&gt;
 
 Rules
 -----
@@ -30,12 +26,10 @@ Other rules are more complex, and require parameters. For example, the "length" 
 
 For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
 
-<code>
-&lt;form id="myform"&gt;
-&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
-&lt;input type="submit" value="Save"/&gt;
-&lt;/form&gt;
-</code>
+	&lt;form id="myform"&gt;
+	&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
+	&lt;input type="submit" value="Save"/&gt;
+	&lt;/form&gt;
 
 
 Here are some built-in rules:
@@ -69,27 +63,25 @@ For example, the plugin <i>elements</i> array might contain: [field1,field2,fiel
 element.data('rules') is an object - used like a named associative array - of functions. Each function is named, and doesn't matter if it's one of Cholroform's built-in preset functions, or a custom one.
 When expressed as JSON, the data('rules') object will look like this:
 
-<code>
-{
-	'notafive':function(){
-		var elem = arguments[0];
-		var val = parseFloat($(elem).val());
-		if (val != 5){
-			return {'valid':false,'message':'this is not a five'};
+	{
+		'notafive':function(){
+			var elem = arguments[0];
+			var val = parseFloat($(elem).val());
+			if (val != 5){
+				return {'valid':false,'message':'this is not a five'};
+			}
+			return {'valid':true};
+		},
+		'max':function()
+			var elem = arguments[0];
+			var val = parseFloat($(elem).val());
+			var max = parseFloat(arguments[1]);
+			if (val > max){
+				return {'valid':false,'message':'this must be less than '+max};
+			}
+			return {'valid':true};
 		}
-		return {'valid':true};
-	},
-	'max':function()
-		var elem = arguments[0];
-		var val = parseFloat($(elem).val());
-		var max = parseFloat(arguments[1]);
-		if (val > max){
-			return {'valid':false,'message':'this must be less than '+max};
-		}
-		return {'valid':true};
 	}
-}
-</code>
 
 
 
@@ -100,11 +92,11 @@ All rules accept <i>element</i> as their first argument. Some accept more additi
 <section>
 <p>element.data('arguments') is an object - again, used like an associative array - of argument arrays. Rules that require extra arguments store those arguments here.</p>
 <p>The data('arguments') object is used to hold the arguments for those rule functions that accept them. For example, one of your rules might be 'length', which accepts the arguments (min,max). If your element validates when the length is between 5 and 16, then the value of data('arguments') will be:</p>
-<code>
-{
-'length':[5,16]
-}
-</code>
+
+	{
+	'length':[5,16]
+	}
+
 <p>By manipulating the data('arguments') object, you can change the parameters of a validation rule without having to change the rule itself. Arguments are populated automatically when you add arguments in square brackets in the data-validate attribute, eg: "length[5:16]"</p>
 <p>When manipulating the arguments object, it is important to remember that every array in arguments must have a function of the same name in rules. The array of values must correspond - in the correct order - to the arguments expected by the corresponding rule function.</p>
 </section>
@@ -114,12 +106,10 @@ All rules accept <i>element</i> as their first argument. Some accept more additi
 
 <p>For example, imagine a very simple form with one field and a submit button.</p>
 
-<code>
-&lt;form id="myform"&gt;
-&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
-&lt;input type="submit" value="Save"/&gt;
-&lt;/form&gt;
-</code>
+	&lt;form id="myform"&gt;
+	&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
+	&lt;input type="submit" value="Save"/&gt;
+	&lt;/form&gt;
 
 <p>In the &lt;head&gt; of this page, you'll add this code:</p>
 
