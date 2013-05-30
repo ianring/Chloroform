@@ -1,21 +1,21 @@
-# About Chloroform
+# Chloroform
 
 Chloroform is the best jQuery-based client-side form validation plugin. It's simple to use, highly extensible, and efficient.
 
 
-# Get Started
+## Get Started
 
 See how easy it is to add form validation to your form elements. Just add an attribute named "data-validate", with special rule names in it like "required" and "length".
 
 For example, the field "myfield" below has a validation rule named "required". It must not be empty.
 
-	&lt;form id="myform"&gt;
-	&lt;input id="myfield" type="text" value="" data-validate="required"/&gt;
-	&lt;input type="submit" value="Save"/&gt;
-	&lt;/form&gt;
+	<form id="myform">
+	<input id="myfield" type="text" value="" data-validate="required"/>
+	<input type="submit" value="Save"/>
+	</form>
 
-Rules
------
+### Rules
+
 A "rule" is a criteria that the value of a form element must fulfil, before it can be deemed valid. 
 
 The rules are named. They have names like "numeric" and "required". To apply a rule to an HTML form element, you add it to the data-validate attribute, like the example above.
@@ -26,34 +26,33 @@ Other rules are more complex, and require parameters. For example, the "length" 
 
 For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
 
-	&lt;form id="myform"&gt;
-	&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
-	&lt;input type="submit" value="Save"/&gt;
-	&lt;/form&gt;
+	<form id="myform">
+	<input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/>
+	<input type="submit" value="Save"/>
+	</form>
 
 
 Here are some built-in rules:
 
-required
-equals
-sameas
-alpha
-numeric
-integer
-max
-min
-between
-length
-choices
-contains
-regex
-email
-url
+* required
+* equals
+* sameas
+* alpha
+* numeric
+* integer
+* max
+* min
+* between
+* length
+* choices
+* contains
+* regex
+* email
+* url
 
 
 
-Plugin Architecture
-===================
+## Plugin Architecture
 
 The plugin defines an array of elements. Each element has two data elements: rules and arguments.
 For example, the plugin <i>elements</i> array might contain: [field1,field2,field3]. Each element in the array is a jQuery object, as would be returned from a jQuery selector like $('#field1').
@@ -106,66 +105,62 @@ All rules accept <i>element</i> as their first argument. Some accept more additi
 
 <p>For example, imagine a very simple form with one field and a submit button.</p>
 
-	&lt;form id="myform"&gt;
-	&lt;input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/&gt;
-	&lt;input type="submit" value="Save"/&gt;
-	&lt;/form&gt;
+	<form id="myform">
+	<input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/>
+	<input type="submit" value="Save"/>
+	</form>
 
 <p>In the &lt;head&gt; of this page, you'll add this code:</p>
 
-<code>
-jQuery(document).ready(function($) {
-$('#myform').chloroform();
-});
-</code>
+	jQuery(document).ready(function($) {
+	$('#myform').chloroform();
+	});
 
-<p>With no great effort, Chloroform has recognized that <em>myfield</em> has a validation rule, so it has been added to the form's array of special fields that require validation. In this case it has only one member: [myfield]</p>
+With no great effort, Chloroform has recognized that <em>myfield</em> has a validation rule, so it has been added to the form's array of special fields that require validation. In this case it has only one member: [myfield]
 
-<p>At the same time, the element <em>myfield</em> has been given two data objects. They are:</p>
-<code>
-rules:{
-'required':function(element){… blah blah blah …}
-'length':function(element,min,max){… blahb blah blah …}
-},
-arguments:{
-'length':[6,16]
-}
-</code>
+At the same time, the element <em>myfield</em> has been given two data objects. They are:
 
-<p>Because <em>myform</em> is a form element (ie not a div or a table), Chloroform also knows to bind the validate() method to its submit() event. When the form is submitted, each of the elements in its <em>elements</em> array are asked, one at a time, to execute their collection of rules and return the result: pass or fail? If any of the rules fail, a message bubble is popped up and the element returns false - a failure. When the form receives a failure response from an element, the form submission is aborted.</p>
-
-<script>
-jQuery(document).ready(function($) {
-$('#myform').chloroform({
-'onAfterValidateAll':function(valid){
-if (valid){
-alert('your form has submitted (but not really)')
-return false;
-}
-return valid;
-}
-});
-});
-</script>
-<h3>Try it</h3>
-<form id="myform">
-<input type="text" data-validate="required,length[6:16]"/>
-<input type="submit" value="Save"/>
-</form>
+	rules:{
+	'required':function(element){… blah blah blah …}
+	'length':function(element,min,max){… blahb blah blah …}
+	},
+	arguments:{
+	'length':[6,16]
+	}
 
 
-</section>
+Because <em>myform</em> is a form element (ie not a div or a table), Chloroform also knows to bind the validate() method to its submit() event. When the form is submitted, each of the elements in its <em>elements</em> array are asked, one at a time, to execute their collection of rules and return the result: pass or fail? If any of the rules fail, a message bubble is popped up and the element returns false - a failure. When the form receives a failure response from an element, the form submission is aborted.
+
+	<script>
+		jQuery(document).ready(function($) {
+			$('#myform').chloroform({
+				'onAfterValidateAll':function(valid){
+					if (valid){
+						alert('your form has submitted (but not really)')
+						return false;
+					}
+					return valid;
+				}
+			});
+		});
+	</script>
+	<h3>Try it</h3>
+	<form id="myform">
+	<input type="text" data-validate="required,length[6:16]"/>
+	<input type="submit" value="Save"/>
+	</form>
 
 
-<h2>Validation on Dynamic and Complicated Forms</h4>
-<section>
-<p>Chloroform's flexibility is its power. Because of its simple structure, public methods, and easy manipulation, you can achieve interactive effects that are not possible with most client-side validation plugins. Chloroform is excellent for dynamic forms, forms that include complex UI components, or even validation on HTML elements that aren't in a &lt;form&gt; at all. Manipulating the validation dynamically is as easy as adding and removing functions to the 'rules' array.</p>
-</section>
 
-<h2>Public Methods</h2>
-<p>One of the design decisions that makes Chloroform amazing is that all its internal functions are exposed as public methods. It's a double-edged sword; it means you can reach in and use those functions to customize your form's behaviour in weird and interesting ways (that's good), though it also means that you can do weird and interesting things that <em>don't work</em>, or that make the whole plugin implode with errors (that's bad).</p>
-<p>Don't let the risk impede your creativity.</p>
-<section>
+## Validation on Dynamic and Complicated Forms
+
+Chloroform's flexibility is its power. Because of its simple structure, public methods, and easy manipulation, you can achieve interactive effects that are not possible with most client-side validation plugins. Chloroform is excellent for dynamic forms, forms that include complex UI components, or even validation on HTML elements that aren't in a &lt;form&gt; at all. Manipulating the validation dynamically is as easy as adding and removing functions to the 'rules' array.
+
+### Public Methods
+
+One of the design decisions that makes Chloroform amazing is that all its internal functions are exposed as public methods. It's a double-edged sword; it means you can reach in and use those functions to customize your form's behaviour in weird and interesting ways (that's good), though it also means that you can do weird and interesting things that <em>don't work</em>, or that make the whole plugin implode with errors (that's bad).
+Don't let the risk impede your creativity.
+
 <table>
 <tr>
 <th>method name</th>
