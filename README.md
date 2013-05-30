@@ -1,11 +1,11 @@
 # Chloroform
 
-Chloroform is the best jQuery-based client-side form validation plugin. It's simple to use, highly extensible, and efficient.
+Chloroform is the best jQuery-based client-side form validation plugin. There are lots of other ones. Some are good, others are horrid. This one is better than them all. It's simple to use, easy to customize, highly extensible, and very efficient.
 
 
 ## Get Started
 
-See how easy it is to add form validation to your form elements. Just add an attribute named "data-validate", with special rule names in it like "required" and "length".
+To add form validation to your form elements, just add an attribute named "data-validate", with special rule names in it like "required" and "length".
 
 For example, the field "myfield" below has a validation rule named "required". It must not be empty.
 
@@ -14,25 +14,48 @@ For example, the field "myfield" below has a validation rule named "required". I
 	<input type="submit" value="Save"/>
 	</form>
 
-### Rules
+### Using Rules
 
 A "rule" is a criteria that the value of a form element must fulfil, before it can be deemed valid. 
 
-The rules are named. They have names like "numeric" and "required". To apply a rule to an HTML form element, you add it to the data-validate attribute, like the example above.
+The rules are named. They have names like "numeric" and "required". To apply a rule to an HTML form element, you add its name to the data-validate attribute, like the example above.
 
-Some rules are simple, like "email" (value just resemble an email address) or "required" (can't be empty).
+### Multiple Rules
 
-Other rules are more complex, and require parameters. For example, the "length" rule takes either one or two arguments. Parameters are expressed in square brackets, separated by a colon.
-
-For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
+To add multiple rules to the same form element, separate the rule names with a comma.
 
 	<form id="myform">
-	<input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/>
+	<input id="myfield" type="text" value="123" data-validate="required,email"/>
 	<input type="submit" value="Save"/>
 	</form>
 
+### Inverting Validation with NOT
 
-Here are some built-in rules:
+To indicate that an element should be valid when a rule does NOT pass, precede the rule name with a !.
+
+For example, this element will be valid if the value is NOT an integer.
+
+	<input type="text" id="field" data-validate="!integer" value="3.141"/>
+
+You can do interesting things with this. For example, to prevent people from putting an email address into a username field, you could explicitly put a NOT email rule on it:
+
+	<input type="text" id="username" data-validate="!email" value=""/>
+
+
+### Rules with Parameters
+
+Some require parameters. For example, the "length" rule takes either one or two parameters. Parameters are expressed in square brackets, separated by a colon.
+
+For example, the field "myfield" below must be between 6 and 16 characters.
+
+	<form id="myform">
+	<input id="myfield" type="text" value="123" data-validate="length[6:16]"/>
+	<input type="submit" value="Save"/>
+	</form>
+
+### Built-In Rules
+
+Chloroform comes with an excellent collection of pre-rolled rules. Here are some that are defined in version 1.0:
 
 * required
 * equals
@@ -52,9 +75,29 @@ Here are some built-in rules:
 
 It's a pretty solid collection of standard, well-written, optimized rules. But Chloroform doesn't end there - it's easy to write your own custom rules, too.
 
+### Custom Rules
 
+A custom rule is a named function that you write in the global scope. The function must adhere to these criteria:
 
+* the first argument is the element being validated, preselected as a jQuery object so you can use methods like element.val()
+* the second argument is a boolean "not". If not is true, then the rule should return the opposite of its normal behaviour.
+* the return value should be an object with one member named "valid". If valid is false, then a second member named "message" contains the error message to be displayed to the user.
 
+Here's a good example:
+
+	function custom1(element,not){
+		if (element.val() == "123"){
+			return {'valid':true}
+		} else {
+			return {'valid':false,'message':'dude, that\'s not right.'}
+		}
+	}
+
+This form element uses the custom1 rule:
+
+	<input type="text" id="field6" data-validate="custom1" value="123"/>
+
+It's that easy!
 
 
 
