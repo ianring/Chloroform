@@ -5,6 +5,24 @@ Chloroform is the best jQuery-based client-side form validation plugin. There ar
 
 ## Get Started
 
+Of course, you need to include the Chloroform script and stylesheet in your head. You need jQuery too.
+
+		<script src="path_to_jquery"></script>
+		<script src="chloroform.js"></script>
+		<link rel="stylesheet" href="chloroform.css" />
+
+You also need to execute Chloroform on a form element. For best results, do this in a ready() callback.
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('#myform').chloroform();
+		});
+		</script>
+		
+There are a bunch of options you can pass in to the chloroform() method, but we'll look at those later.
+
+## Your First Validation with Chloroform
+
 To add form validation to your form elements, just add an attribute named "data-validate", with special rule names in it like "required" and "length".
 
 For example, the field "myfield" below has a validation rule named "required". It must not be empty.
@@ -114,6 +132,69 @@ This rule would be applied to this form element. Notice the parameter in square 
 	<input type="text" id="field7" data-validate="maximum[5]" value="123"/>
 
 
+## Chloroform Options
+
+
+
+You can customize how chloroform behaves by defining a whole bunch of useful options.
+	<script>
+		jQuery(document).ready(function($) {
+			$('#myform').chloroform({
+				lang: 'en', 							// default language - i18n has not been implemented yet
+				validateDataAttr: 'data-validate', 		// name of the attribute which stores what validation rules to apply
+				scrollToBubble: true,					// if true, then the error bubble popup will scroll into view.
+				
+				// callback functions
+				onBeforeValidateAll: function(){
+					// do something before a validateAll action
+				},
+				onAfterValidateAll: function(){
+					// do something after a validateAll action
+				},
+				onBeforeValidate:function(){
+					// do something before a validate action
+				},
+				onAfterValidate:function(){
+					// do something after a validate action
+				}
+			});
+		});
+	</script>
+
+## Options
+
+### lang
+at this time, i18n is not implemented. The "lang" option is reserved for use as a language identifier.
+
+### validateDataAttr
+this is the attribute that will be used to register validation rules. By default it's data-validate, but you can change that.
+
+### scrollToBubble
+if true, then the error bubble popup will scroll into view when it appears, with an animated "smooth scroll".
+
+## Callback Functions
+
+### onBeforeValidateAll()
+returns boolean
+
+if onBeforeValidateAll returns false, the validation is aborted and validateAll() returns false, and the submit event that triggered the validation is aborted. 
+if onBeforeValidateAll returns true, then validation proceeds normally. 
+Use this to prevent the validation from continuing based on some other factor which may invalidate the entire form.
+
+### onAfterValidateAll(bool allPassed)
+Has one argument, indicating if all the validation rules passed. If onAfterValidateAll returns true, then submission proceeds normally. If onAfterValidateAll returns false, then submission is stopped. 
+Use this callback to hook in additional behaviour to the form, for example to control the disabled state of the submit button if the form isn't filled out correctly.
+
+
+
+
+
+
+
+
+
+
+
 
 ## Chloroform Object Architecture
 
@@ -166,30 +247,16 @@ The data('arguments') object is used to hold the arguments for those rule functi
 By manipulating the data('arguments') object, you can change the parameters of a validation rule without having to change the rule itself. Arguments are populated automatically when you add arguments in square brackets in the data-validate attribute, eg: "length[5:16]"
 When manipulating the arguments object, it is important to remember that every array in arguments must have a function of the same name in rules. The array of values must correspond - in the correct order - to the arguments expected by the corresponding rule function.
 
-## How it all fits together
-
-When Chloroform is initialied, all these data objects are quickly assembled based on attributes defined in the HTML. When it's done, you'll end up with form fields that <em>know how to validate themselves</em>, and some handy public methods for triggering the validation.
-
-For example, imagine a very simple form with one field and a submit button.
-
-	<form id="myform">
-	<input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/>
-	<input type="submit" value="Save"/>
-	</form>
-
-In the &lt;head&gt; of this page, you'll add this code:
-
-	jQuery(document).ready(function($) {
-	$('#myform').chloroform();
-	});
-
-With no great effort, Chloroform has recognized that <em>myfield</em> has a validation rule, so it has been added to the form's array of special fields that require validation. In this case it has only one member: [myfield]
 
 At the same time, the element <em>myfield</em> has been given two data objects. They are:
 
 	rules:{
-		'required':function(element){… blah blah blah …}
-		'length':function(element,min,max){… blahb blah blah …}
+		'required':function(element){
+			… // code omitted here
+		},
+		'length':function(element,min,max){
+			… // code omitted here
+		}
 	},
 	arguments:{
 		'length':[6,16]
@@ -219,7 +286,9 @@ Because <em>myform</em> is a form element (ie not a div or a table), Chloroform 
 
 ## Validation on Dynamic and Complicated Forms
 
-Chloroform's flexibility is its power. Because of its simple structure, public methods, and easy manipulation, you can achieve interactive effects that are not possible with most client-side validation plugins. Chloroform is excellent for dynamic forms, forms that include complex UI components, or even validation on HTML elements that aren't in a &lt;form&gt; at all. Manipulating the validation dynamically is as easy as adding and removing functions to the 'rules' array.
+Chloroform's flexibility is its power. Because of its simple structure, public methods, and easy manipulation, you can achieve interactive effects that are not possible with most client-side validation plugins. 
+
+Chloroform is excellent for dynamic forms, forms that include complex UI components, or even validation on HTML elements that aren't in a &lt;form&gt; at all. Manipulating the validation dynamically is as easy as adding and removing functions to the 'rules' array.
 
 ### Public Methods
 
@@ -362,32 +431,6 @@ return {'valid':true};
 </section>
 
 
-<h2>Callback functions</h2>	
-<section>
-<table>
-<tr>
-<th>function name</th>
-<th>arguments</th>
-<th>return</th>
-<th>usage</th>
-</tr>
-<tr>
-<td>onBeforeValidateAll()</td>
-<td>none</td>
-<td>boolean</td>
-<td>
-if onBeforeValidateAll returns false, the validation is aborted and validateAll() returns false, and the submit event that
-triggered the validation is aborted. if onBeforeValidateAll returns true, then validation proceeds normally. Use this to prevent the validation from continuing.
-</td>
-</tr>
-<tr>
-<td>onAfterValidateAll(bool)</td>
-<td>boolean</td>
-<td>boolean</td>
-<td>Has one argument, indicating if all the validation rules passed. If onAfterValidateAll returns true, then submission proceeds normally. If onAfterValidateAll returns false, then submission is stopped. Use this callback to hook in additional behaviour to the form, for example to control the disabled state of the submit button if the form isn't filled out correctly.</td>
-</tr>
-</table>
-</section>
 
 
 
