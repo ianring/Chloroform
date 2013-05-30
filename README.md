@@ -1,6 +1,6 @@
 # Chloroform
 
-Chloroform is the best jQuery-based client-side form validation plugin. There are lots of other ones. Some are good, others are horrid. This one is better than them all. It's simple to use, easy to customize, highly extensible, and very efficient.
+Chloroform is the best jQuery-based client-side form validation plugin. There are lots of other ones. Some are good, others are horrid. This one is much better than most, and slightly awesomer than the second best. It's simple to use, easy to customize, highly extensible, and very efficient.
 
 
 ## Get Started
@@ -19,6 +19,9 @@ You also need to execute Chloroform on a form element. For best results, do this
 		});
 		</script>
 		
+		<form id="myform">
+		etc.
+		
 There are a bunch of options you can pass in to the chloroform() method, but we'll look at those later.
 
 ## Your First Validation with Chloroform
@@ -34,7 +37,7 @@ For example, the field "myfield" below has a validation rule named "required". I
 
 ### Using Rules
 
-A "rule" is a criteria that the value of a form element must fulfil, before it can be deemed valid. 
+A "rule" is a criterium that the value of a form element must fulfil, before it can be deemed valid. In reality, it's a javascript function that returns true or false.
 
 The rules are named. They have names like "numeric" and "required". To apply a rule to an HTML form element, you add its name to the data-validate attribute, like the example above.
 
@@ -47,7 +50,7 @@ To add multiple rules to the same form element, separate the rule names with a c
 	<input type="submit" value="Save"/>
 	</form>
 
-### Inverting Validation with NOT
+### Inverting Validation with "!"
 
 To indicate that an element should be valid when a rule does NOT pass, precede the rule name with a !.
 
@@ -59,10 +62,14 @@ You can do interesting things with this. For example, to prevent people from put
 
 	<input type="text" id="username" data-validate="!email" value=""/>
 
+You could also prevent words from being present in the value, by putting a NOT operator on the "contains" rule:
 
-### Rules with Parameters
+	<input type="text" id="username" data-validate="!contains[badword]" value=""/>
 
-Some require parameters. For example, the "length" rule takes either one or two parameters. Parameters are expressed in square brackets, separated by a colon.
+
+### Rules with Arguments
+
+Some require arguments. For example, the "length" rule takes either one or two arguments. Arguments are expressed in square brackets, separated by a colon.
 
 For example, the field "myfield" below must be between 6 and 16 characters.
 
