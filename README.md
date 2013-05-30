@@ -50,6 +50,11 @@ To add multiple rules to the same form element, separate the rule names with a c
 	<input type="submit" value="Save"/>
 	</form>
 
+The logic operator binding multiple rules is "AND". In order for a form element to be valid, it must obey all the rules. In the example above, the form element must be not-empty (required) AND it must also look like an email address.
+
+If you have unusual validation rules that require something like an "OR" or some other logical operation, then you just need to create a custom rule. Which is easy to do.
+
+
 ### Inverting Validation with "!"
 
 To indicate that an element should be valid when a rule does NOT pass, precede the rule name with a !.
