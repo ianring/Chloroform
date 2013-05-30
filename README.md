@@ -97,9 +97,9 @@ This form element uses the custom1 rule:
 
 	<input type="text" id="field6" data-validate="custom1" value="123"/>
 
-It's that easy!
+It's that easy! If your data-validate attribute contains a name, Chloroform will look for a function with that name in the global scope. 
 
-Here's one that's a little more complex, showing how the wording of the error message is altered by the "not" inversion:
+Here's one that's a little more complex, showing how the wording of the error message is altered by the "not" inversion. It also takes a third argument:
 
 	function maximum(elem,not,max){
 		var val = parseFloat($(elem).val());
@@ -107,16 +107,24 @@ Here's one that's a little more complex, showing how the wording of the error me
 			return not?{'valid':true}:{'valid':false,'message':'this must be less than '+max};
 		}
 		return not?{'valid':false,'message':'this must not be less than '+max}:{'valid':true};
-	},
+	}
+
+This rule would be applied to this form element. Notice the parameter in square brackets, which is ultimately passed along as the third argument of the maximum() function.
+
+	<input type="text" id="field7" data-validate="maximum[5]" value="123"/>
 
 
 
-## Chloroform Architecture
+## Chloroform Object Architecture
+
+Chloroform achieves its validation by saving an object in the "data" property of each form element. This object doesn't just describe how the element should be validated - it actually contains the functions that are executed, when triggered by Chloroform's form handlers.
 
 The plugin defines an array of elements. Each element has two data elements: rules and arguments.
 For example, the plugin <i>elements</i> array might contain: [field1,field2,field3]. Each element in the array is a jQuery object, as would be returned from a jQuery selector like $('#field1').
 
-### element.data('rules')
+The validation rules applied to each element are stored in its data object. The rules inhabit two named objects in the element's data: rules and arguments.
+
+#### element.data('rules')
 
 element.data('rules') is an object - used like a named associative array - of functions. Each function is named, and doesn't matter if it's one of Cholroform's built-in preset functions, or a custom one.
 When expressed as JSON, the data('rules') object will look like this:
@@ -146,13 +154,13 @@ When expressed as JSON, the data('rules') object will look like this:
 
 All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
 
-### element.data('arguments')
+#### element.data('arguments')
 
 element.data('arguments') is an object - again, used like an associative array - of argument arrays. Rules that require extra arguments store those arguments here.
 The data('arguments') object is used to hold the arguments for those rule functions that accept them. For example, one of your rules might be 'length', which accepts the arguments (min,max). If your element validates when the length is between 5 and 16, then the value of data('arguments') will be:
 
 	{
-	'length':[5,16]
+		'length':[5,16]
 	}
 
 By manipulating the data('arguments') object, you can change the parameters of a validation rule without having to change the rule itself. Arguments are populated automatically when you add arguments in square brackets in the data-validate attribute, eg: "length[5:16]"

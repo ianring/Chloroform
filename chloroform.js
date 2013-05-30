@@ -19,7 +19,7 @@
 				var settings = {
 					lang: 'en', 						// default language - i18n has not been implemented yet
 					validateDataAttr: 'data-validate', 	// name of the attribute which stores what validation rules to apply
-					scrollToBubble: true,
+					scrollToBubble: true,				// if true, then a bubble popup will scroll into view.
 					
 					// callback functions
 					onBeforeValidateAll:null,
@@ -511,7 +511,7 @@
 			return methods.init.apply(this, arguments);
 		}
 		else {
-			$.error("Method " +	 method + " does not exist on jQuery.example");
+			$.error("Method " +	 method + " does not exist on jQuery.chloroform");
 		}
 	};
 
