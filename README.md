@@ -307,7 +307,7 @@ Don't let the risk impede your creativity.
 
 <!-- validate -->
 <tr>
-<td><h4>validate(element)</h4></td>
+<td>validate(element)</td>
 <td>
 <dt>element</dt>
 <dd>the element to be validated</dd>
@@ -324,7 +324,7 @@ var isvalid = $.fn.chloroform('validate',$('#efield1'));
 
 <!-- validateAll -->
 <tr>
-<td><h4>validateAll()</h4></td>
+<td>validateAll()</td>
 <td>none</td>
 <td>true or false, indicating if the entire form validated</td>
 <td><p>This function essentially executes validate() on each registered element, and returns true/false if they all passed. This function is normally triggered directly by a submit event.</p></td>
@@ -340,7 +340,7 @@ var isvalid = $('#myform').chloroform('validateAll');
 
 <!-- register -->
 <tr>
-<td><h4>register(element)</h4></td>
+<td>register(element)</td>
 <td>
 <dt>element</dt>
 <dd>the element to be added. Registering an element puts it in the list of elements to be checked when validateAll is called. Adding a data-validate attribute to an element does this automatically when the validator is initialized.</dd>
@@ -352,7 +352,7 @@ var isvalid = $('#myform').chloroform('validateAll');
 
 <!-- unregister -->
 <tr>
-<td><h4>unregister(element)</h4></td>
+<td>unregister(element)</td>
 <td>
 <dt>element</dt>
 <dd>the element to be removed from the list of elements being validated.</dd>
@@ -364,7 +364,7 @@ var isvalid = $('#myform').chloroform('validateAll');
 
 <!-- addrule -->
 <tr>
-<td><h4>addrule(element,rule)</h4></td>
+<td>addrule(element,rule)</td>
 <td>
 <dt>element</dt>
 <dd>the element to which this rule will be added</dt>
@@ -402,7 +402,7 @@ return {'valid':true};
 
 <!-- removerule -->
 <tr>
-<td><h4>removerule(element,rulename)</h4></td>
+<td>removerule(element,rulename)</td>
 <td>element: the element being altered. rulename: the name of the rule being removed.</td>
 <td>true</td>
 <td><p>Removes a named rule from the element.</p></td>
@@ -411,7 +411,7 @@ return {'valid':true};
 
 <!-- showbubble -->
 <tr>
-<td><h4>showbubble(element,string)</h4></td>
+<td>showbubble(element,string)</td>
 <td>
 <dt>element</dt>
 <dd>the element that the bubble will point to. string: the message to be shown in the bubble.</dd>
@@ -423,7 +423,7 @@ return {'valid':true};
 
 <!-- hidebubble -->
 <tr>
-<td><h4>hidebubble()</h4></td>
+<td>hidebubble()</td>
 <td>none</td>
 <td><p>hides the popup bubble.</p></td>
 <td></td>
