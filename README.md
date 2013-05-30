@@ -22,7 +22,7 @@ The rules are named. They have names like "numeric" and "required". To apply a r
 
 Some rules are simple, like "email" (value just resemble an email address) or "required" (can't be empty).
 
-Other rules are more complex, and require parameters. For example, the "length" rule takes either one or two arguments. If only one is provided, it is the minimum length criteria. If two parameters are provided, then they are minimum and maximum. Parameters are expressed in square brackets, separated by a colon.
+Other rules are more complex, and require parameters. For example, the "length" rule takes either one or two arguments. Parameters are expressed in square brackets, separated by a colon.
 
 For example, the field "myfield" below must not be empty, and furthermore its length must be between 6 and 16 characters.
 
@@ -50,14 +50,20 @@ Here are some built-in rules:
 * email
 * url
 
+It's a pretty solid collection of standard, well-written, optimized rules. But Chloroform doesn't end there - it's easy to write your own custom rules, too.
 
 
-## Plugin Architecture
+
+
+
+
+
+## Chloroform Architecture
 
 The plugin defines an array of elements. Each element has two data elements: rules and arguments.
 For example, the plugin <i>elements</i> array might contain: [field1,field2,field3]. Each element in the array is a jQuery object, as would be returned from a jQuery selector like $('#field1').
 
-<h3>element.data('rules')</h3>
+### element.data('rules')
 
 element.data('rules') is an object - used like a named associative array - of functions. Each function is named, and doesn't matter if it's one of Cholroform's built-in preset functions, or a custom one.
 When expressed as JSON, the data('rules') object will look like this:
@@ -87,30 +93,30 @@ When expressed as JSON, the data('rules') object will look like this:
 
 All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
 
-<h3>element.data('arguments')</h3>
-<section>
-<p>element.data('arguments') is an object - again, used like an associative array - of argument arrays. Rules that require extra arguments store those arguments here.</p>
-<p>The data('arguments') object is used to hold the arguments for those rule functions that accept them. For example, one of your rules might be 'length', which accepts the arguments (min,max). If your element validates when the length is between 5 and 16, then the value of data('arguments') will be:</p>
+### element.data('arguments')
+
+element.data('arguments') is an object - again, used like an associative array - of argument arrays. Rules that require extra arguments store those arguments here.
+The data('arguments') object is used to hold the arguments for those rule functions that accept them. For example, one of your rules might be 'length', which accepts the arguments (min,max). If your element validates when the length is between 5 and 16, then the value of data('arguments') will be:
 
 	{
 	'length':[5,16]
 	}
 
-<p>By manipulating the data('arguments') object, you can change the parameters of a validation rule without having to change the rule itself. Arguments are populated automatically when you add arguments in square brackets in the data-validate attribute, eg: "length[5:16]"</p>
-<p>When manipulating the arguments object, it is important to remember that every array in arguments must have a function of the same name in rules. The array of values must correspond - in the correct order - to the arguments expected by the corresponding rule function.</p>
-</section>
+By manipulating the data('arguments') object, you can change the parameters of a validation rule without having to change the rule itself. Arguments are populated automatically when you add arguments in square brackets in the data-validate attribute, eg: "length[5:16]"
+When manipulating the arguments object, it is important to remember that every array in arguments must have a function of the same name in rules. The array of values must correspond - in the correct order - to the arguments expected by the corresponding rule function.
 
-<h3>How it all fits together</h3>
-<p>When Chloroform is initialied, all these data objects are quickly assembled based on attributes defined in the HTML. When it's done, you'll end up with form fields that <em>know how to validate themselves</em>, and some handy public methods for triggering the validation.</p>
+## How it all fits together
 
-<p>For example, imagine a very simple form with one field and a submit button.</p>
+When Chloroform is initialied, all these data objects are quickly assembled based on attributes defined in the HTML. When it's done, you'll end up with form fields that <em>know how to validate themselves</em>, and some handy public methods for triggering the validation.
+
+For example, imagine a very simple form with one field and a submit button.
 
 	<form id="myform">
 	<input id="myfield" type="text" value="123" data-validate="required,length[6:16]"/>
 	<input type="submit" value="Save"/>
 	</form>
 
-<p>In the &lt;head&gt; of this page, you'll add this code:</p>
+In the &lt;head&gt; of this page, you'll add this code:
 
 	jQuery(document).ready(function($) {
 	$('#myform').chloroform();
@@ -121,13 +127,12 @@ With no great effort, Chloroform has recognized that <em>myfield</em> has a vali
 At the same time, the element <em>myfield</em> has been given two data objects. They are:
 
 	rules:{
-	'required':function(element){… blah blah blah …}
-	'length':function(element,min,max){… blahb blah blah …}
+		'required':function(element){… blah blah blah …}
+		'length':function(element,min,max){… blahb blah blah …}
 	},
 	arguments:{
-	'length':[6,16]
+		'length':[6,16]
 	}
-
 
 Because <em>myform</em> is a form element (ie not a div or a table), Chloroform also knows to bind the validate() method to its submit() event. When the form is submitted, each of the elements in its <em>elements</em> array are asked, one at a time, to execute their collection of rules and return the result: pass or fail? If any of the rules fail, a message bubble is popped up and the element returns false - a failure. When the form receives a failure response from an element, the form submission is aborted.
 
@@ -149,7 +154,6 @@ Because <em>myform</em> is a form element (ie not a div or a table), Chloroform 
 	<input type="text" data-validate="required,length[6:16]"/>
 	<input type="submit" value="Save"/>
 	</form>
-
 
 
 ## Validation on Dynamic and Complicated Forms
@@ -324,12 +328,8 @@ triggered the validation is aborted. if onBeforeValidateAll returns true, then v
 </table>
 </section>
 
-<hr/>
+
 
 <a name="customrules"></a><h2>Custom Rules</h2>
-<section>
-<p>when you use the name of a custom rule in the data-validate attribute of an element, or pass in a function as the argument of addrule(), the function must behave in a specific way.</p>
-</section>
 
-</body>	
-</html>
+when you use the name of a custom rule in the data-validate attribute of an element, or pass in a function as the argument of addrule(), the function must behave in a specific way.
