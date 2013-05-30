@@ -1,63 +1,44 @@
-<html>
+About Chloroform
+================
 
-<head>
-<link href="style.css" rel="stylesheet"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-<link href="../chloroform.css" rel="stylesheet"/>
-<script src="../chloroform.js"></script>
-</head>
-
-<body>
-<h2>Usage</h2>
-<section>
-<p><i>requires jQuery 1.7+</i></p>
-<h3>JS</h3>
-<code>
-jQuery(document).ready(function($) {
-$('#editform').chloroform();
-});
-</code>
-
-<h4>HTML</h4>
-<textarea class="codeexample">
-<input type="text" data-validate="required,alpha"/>
-</textarea>
-</section>
+Chloroform is the best jQuery-based client-side form validation plugin. It's simple to use, highly extensible, and efficient.
 
 
+Plugin Architecture
+===================
 
-<h2>Plugin Architecture</h2>
-<section>
-<p>The plugin defines an array of elements. Each element has two data elements: rules and arguments.</p>
-<p>For example, the plugin <i>elements</i> array might contain: [field1,field2,field3]. Each element in the array is a jQuery object, as would be returned from a jQuery selector like $('#field1').</p>
+The plugin defines an array of elements. Each element has two data elements: rules and arguments.
+For example, the plugin <i>elements</i> array might contain: [field1,field2,field3]. Each element in the array is a jQuery object, as would be returned from a jQuery selector like $('#field1').
 
 <h3>element.data('rules')</h3>
-<section>
-<p>element.data('rules') is an object - used like a named associative array - of functions. Each function is named, and doesn't matter if it's one of Cholroform's built-in preset functions, or a custom one.</p>
-<p>When expressed as JSON, the data('rules') object will look like this:</p>
+
+element.data('rules') is an object - used like a named associative array - of functions. Each function is named, and doesn't matter if it's one of Cholroform's built-in preset functions, or a custom one.
+When expressed as JSON, the data('rules') object will look like this:
+
 <code>
 {
-'notafive':function(){
-var elem = arguments[0];
-var val = parseFloat($(elem).val());
-if (val != 5){
-return {'valid':false,'message':'this is not a five'};
-}
-return {'valid':true};
-},
-'max':function()
-var elem = arguments[0];
-var val = parseFloat($(elem).val());
-var max = parseFloat(arguments[1]);
-if (val > max){
-return {'valid':false,'message':'this must be less than '+max};
-}
-return {'valid':true};
-}
+	'notafive':function(){
+		var elem = arguments[0];
+		var val = parseFloat($(elem).val());
+		if (val != 5){
+			return {'valid':false,'message':'this is not a five'};
+		}
+		return {'valid':true};
+	},
+	'max':function()
+		var elem = arguments[0];
+		var val = parseFloat($(elem).val());
+		var max = parseFloat(arguments[1]);
+		if (val > max){
+			return {'valid':false,'message':'this must be less than '+max};
+		}
+		return {'valid':true};
+	}
 }
 </code>
-<p>All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.</p>
-</section>
+
+All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
+
 
 <h3>element.data('arguments')</h3>
 <section>
