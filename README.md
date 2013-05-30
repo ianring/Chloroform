@@ -80,10 +80,10 @@ It's a pretty solid collection of standard, well-written, optimized rules. But C
 A custom rule is a named function that you write in the global scope. The function must adhere to these criteria:
 
 * the first argument is the element being validated, preselected as a jQuery object so you can use methods like element.val()
-* the second argument is a boolean "not". If not is true, then the rule should return the opposite of its normal behaviour.
+* the second argument the "not" boolean, indicating if the rule is being applied normally, or inverted. Depending on the behaviour of the rule, this may mean just the difference between a pass or fail, but it may also change the error message being returned.
 * the return value should be an object with one member named "valid". If valid is false, then a second member named "message" contains the error message to be displayed to the user.
 
-Here's a good example:
+Here's a good, simple example:
 
 	function custom1(element,not){
 		if (element.val() == "123"){
@@ -98,6 +98,16 @@ This form element uses the custom1 rule:
 	<input type="text" id="field6" data-validate="custom1" value="123"/>
 
 It's that easy!
+
+Here's one that's a little more complex, showing how the wording of the error message is altered by the "not" inversion:
+
+	function maximum(elem,not,max){
+		var val = parseFloat($(elem).val());
+		if (val > max){
+			return not?{'valid':true}:{'valid':false,'message':'this must be less than '+max};
+		}
+		return not?{'valid':false,'message':'this must not be less than '+max}:{'valid':true};
+	},
 
 
 
