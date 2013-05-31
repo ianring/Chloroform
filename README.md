@@ -180,7 +180,7 @@ You can customize how chloroform behaves by defining a whole bunch of useful opt
 at this time, i18n is not implemented. The "lang" option is reserved for use as a language identifier.
 
 ### validateDataAttr
-this is the attribute that will be used to register validation rules. By default it's data-validate, but you can change that.
+this is the attribute that will be used to register validation rules. By default it's "data-validate", but you can change that.
 
 ### scrollToBubble
 if true, then the error bubble popup will scroll into view when it appears, with an animated "smooth scroll".
@@ -198,9 +198,15 @@ Use this to prevent the validation from continuing based on some other factor wh
 Has one argument, indicating if all the validation rules passed. If onAfterValidateAll returns true, then submission proceeds normally. If onAfterValidateAll returns false, then submission is stopped. 
 Use this callback to hook in additional behaviour to the form, for example to control the disabled state of the submit button if the form isn't filled out correctly.
 
+### onBeforeValidate()
+returns boolean
+this callback is triggered immediately before any validation begins on an element. If many elements are being validated, then this function will be called once for each element.
+If this function returns false, then the validation will fail and abort.
 
-
-
+### onAfterValidate(bool passed)
+returns boolean
+this callback is triggered immediately after all the validation rules are finished on an element. The argument passed into onAfterValidate() is whether the rules passed or failed.
+If this function returns false, then validation fails and aborts.
 
 
 
@@ -226,6 +232,7 @@ When expressed as JSON, the data('rules') object will look like this:
 	{
 		'notafive':function(){
 			var elem = arguments[0];
+			var not = arguments[1];
 			var val = parseFloat($(elem).val());
 			if (val != 5){
 				return {'valid':false,'message':'this is not a five'};
@@ -234,8 +241,9 @@ When expressed as JSON, the data('rules') object will look like this:
 		},
 		'max':function()
 			var elem = arguments[0];
+			var not = arguments[1];
 			var val = parseFloat($(elem).val());
-			var max = parseFloat(arguments[1]);
+			var max = parseFloat(arguments[2]);
 			if (val > max){
 				return {'valid':false,'message':'this must be less than '+max};
 			}
@@ -246,7 +254,7 @@ When expressed as JSON, the data('rules') object will look like this:
 
 
 
-All rules accept <i>element</i> as their first argument. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
+All rules accept <i>element</i> as their first argument, and <i>not</i> as their second. Some accept more additional arguments. The return value of a rule function is strict, as will be explained below.
 
 #### element.data('arguments')
 
@@ -261,192 +269,4 @@ By manipulating the data('arguments') object, you can change the parameters of a
 When manipulating the arguments object, it is important to remember that every array in arguments must have a function of the same name in rules. The array of values must correspond - in the correct order - to the arguments expected by the corresponding rule function.
 
 
-At the same time, the element <em>myfield</em> has been given two data objects. They are:
 
-	rules:{
-		'required':function(element){
-			… // code omitted here
-		},
-		'length':function(element,min,max){
-			… // code omitted here
-		}
-	},
-	arguments:{
-		'length':[6,16]
-	}
-
-Because <em>myform</em> is a form element (ie not a div or a table), Chloroform also knows to bind the validate() method to its submit() event. When the form is submitted, each of the elements in its <em>elements</em> array are asked, one at a time, to execute their collection of rules and return the result: pass or fail? If any of the rules fail, a message bubble is popped up and the element returns false - a failure. When the form receives a failure response from an element, the form submission is aborted.
-
-	<script>
-		jQuery(document).ready(function($) {
-			$('#myform').chloroform({
-				'onAfterValidateAll':function(valid){
-					if (valid){
-						alert('your form has submitted (but not really)')
-						return false;
-					}
-					return valid;
-				}
-			});
-		});
-	</script>
-	<h3>Try it</h3>
-	<form id="myform">
-	<input type="text" data-validate="required,length[6:16]"/>
-	<input type="submit" value="Save"/>
-	</form>
-
-
-## Validation on Dynamic and Complicated Forms
-
-Chloroform's flexibility is its power. Because of its simple structure, public methods, and easy manipulation, you can achieve interactive effects that are not possible with most client-side validation plugins. 
-
-Chloroform is excellent for dynamic forms, forms that include complex UI components, or even validation on HTML elements that aren't in a &lt;form&gt; at all. Manipulating the validation dynamically is as easy as adding and removing functions to the 'rules' array.
-
-### Public Methods
-
-One of the design decisions that makes Chloroform amazing is that all its internal functions are exposed as public methods. It's a double-edged sword; it means you can reach in and use those functions to customize your form's behaviour in weird and interesting ways (that's good), though it also means that you can do weird and interesting things that <em>don't work</em>, or that make the whole plugin implode with errors (that's bad).
-Don't let the risk impede your creativity.
-
-<table>
-<tr>
-<th>method name</th>
-<th>arguments</th>
-<th>returns</th>
-<th>description</th>
-<th>example</th>
-</tr>
-
-<!-- validate -->
-<tr>
-<td>validate(element)</td>
-<td>
-<dt>element</dt>
-<dd>the element to be validated</dd>
-</td>
-<td>true or false, indicating if all the rules passed</td>
-<td><p>validates the rules on a single element</p></td>
-<td>
-<code>
-var isvalid = $.fn.chloroform('validate',$('#efield1'));
-</code>
-<a href="example-validate.html">example</a>
-</td>
-</tr>
-
-<!-- validateAll -->
-<tr>
-<td>validateAll()</td>
-<td>none</td>
-<td>true or false, indicating if the entire form validated</td>
-<td><p>This function essentially executes validate() on each registered element, and returns true/false if they all passed. This function is normally triggered directly by a submit event.</p></td>
-<td>
-<code>
-var isvalid = $.fn.chloroform('validateAll',$('#myform'));
-
-var isvalid = $('#myform').chloroform('validateAll');
-
-</code>
-</td>
-</tr>
-
-<!-- register -->
-<tr>
-<td>register(element)</td>
-<td>
-<dt>element</dt>
-<dd>the element to be added. Registering an element puts it in the list of elements to be checked when validateAll is called. Adding a data-validate attribute to an element does this automatically when the validator is initialized.</dd>
-</td>
-<td>true</td>
-<td><p>Adds an element to the validator. Use this to hook up dynamically generated form elements.</p></td>
-<td></td>
-</tr>
-
-<!-- unregister -->
-<tr>
-<td>unregister(element)</td>
-<td>
-<dt>element</dt>
-<dd>the element to be removed from the list of elements being validated.</dd>
-</td>
-<td>true</td>
-<td><p>Removes an element from the validator</p></td>
-<td></td>
-</tr>
-
-<!-- addrule -->
-<tr>
-<td>addrule(element,rule)</td>
-<td>
-<dt>element</dt>
-<dd>the element to which this rule will be added</dt>
-
-<dt>rule</dt>
-<dd>
-either:
-<ul>
-<li>an object with one child node, whose name is the custom rule name and whose value is a function to be called when validating this element. <a href='#customrules'>See examples</a>.</li>
-<li>a string representation of preset named rules, eg "required,length[5]"</li>
-</ul>
-</dd>
-</td>
-<td>true, if the argument is OK. false if the argument is bad.</td>
-<td><p>Adds a rule to an element</p></td>
-<td>
-<code>
-$.fn.chloroform(
-'addrule',
-$('#efield1'),
-{
-'isfoo':function(){
-var elem = arguments[0];
-if ($(elem).val() != 'foo'){
-return {'valid':false,'message':'this field is not foo'};
-}
-return {'valid':true};
-}
-}
-);
-</code>	
-
-</td>
-</tr>
-
-<!-- removerule -->
-<tr>
-<td>removerule(element,rulename)</td>
-<td>element: the element being altered. rulename: the name of the rule being removed.</td>
-<td>true</td>
-<td><p>Removes a named rule from the element.</p></td>
-<td></td>
-</tr>
-
-<!-- showbubble -->
-<tr>
-<td>showbubble(element,string)</td>
-<td>
-<dt>element</dt>
-<dd>the element that the bubble will point to. string: the message to be shown in the bubble.</dd>
-</td>
-<td>true</td>
-<td><p>shows and points the popup bubble at the specified element, with the message in it. This method is called by validate() when a rule fails. Note that since this is a public method, you can point it at any element, with any message.</p></td>
-<td></td>
-</tr>
-
-<!-- hidebubble -->
-<tr>
-<td>hidebubble()</td>
-<td>none</td>
-<td><p>hides the popup bubble.</p></td>
-<td></td>
-</tr>
-</table>
-</section>
-
-
-
-
-
-<a name="customrules"></a><h2>Custom Rules</h2>
-
-when you use the name of a custom rule in the data-validate attribute of an element, or pass in a function as the argument of addrule(), the function must behave in a specific way.

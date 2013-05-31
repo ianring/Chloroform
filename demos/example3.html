@@ -7,117 +7,18 @@
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
-	$('#editform').chloroform();
-	
-	$('#button1').click(function(){
-		var isvalid = $.fn.chloroform('validate',$('#field2'));
-	});
-	
-	$('#button2').click(function(){
-		var isvalid = $.fn.chloroform('validateAll');
-	});
-	
+
 });
-function custom1(element){
-	if (element.val() == "123"){
-		return {'valid':true}
-	} else {
-		return {'valid':false,'message':'dude, that\'s not right.'}
-	}
-}
-function custom2(element){
-	return {'valid':false,'message':'custom2 always returns false.'};
-}
 </script>
 </head>
 <body>
 <h1>Chloroform</h1>
 
 <h2>dynamic form elements</h2>
-<form id="editform">
-		<table>
-			<tr>
-				<th>data-validate attribute</th>
-				<th>Description</th>
-				<th>Field</th>
-			</tr>
-			<tr>
-				<td>required,alpha</td>
-				<td></td>
-				<td><input type="text" id="field1" data-validate="required,alpha" value="abc"/></td>
-			</tr>
-			<tr>
-				<td>required,numeric</td>
-				<td></td>
-				<td><input type="text" id="field2" data-validate="required,numeric" value="abc"/></td>
-			</tr>
-			<tr>
-				<td>integer</td>
-				<td></td>
-				<td><input type="text" id="field3" data-validate="integer" value="abc"/></td>
-			</tr>
-			<tr>
-				<td>length[5]</td>
-				<td>(id = password1)</td>
-				<td><input type="text" id="field4" data-validate="length[5]" value="boob"/></td>
-			</tr>
-			<tr>
-				<td>sameas[password1]</td>
-				<td></td>
-				<td><input type="text" id="field5" data-validate="sameas[field4]" value="boo"/></td>
-			</tr>
-			<tr>
-				<td>custom1</td>
-				<td>must be "123"</td>
-				<td><input type="text" id="field6" data-validate="custom1" value="123"/></td>
-			</tr>
-			<tr>
-				<td>required</td>
-				<td>must be checked</td>
-				<td><input type="checkbox" id="field7" data-validate="required" value="abc"/></td>
-			</tr>
-			<tr>
-				<td>max[10]</td>
-				<td></td>
-				<td><input type="text" id="field8" data-validate="max[10]" value="13"/></td>
-			</tr>
-			<tr>
-				<td>min[5]</td>
-				<td></td>
-				<td><input type="text" id="field9" data-validate="min[5]" value="3"/></td>
-			</tr>
-			<tr>
-				<td>between[5:10]</td>
-				<td></td>
-				<td><input type="text" id="field10" data-validate="between[5:10]" value="3"/></td>
-			</tr>
-			<tr>
-				<td>length[6]</td>
-				<td></td>
-				<td><input type="text" id="field11" data-validate="length[6]" value="asdf"/></td>
-			</tr>
-			<tr>
-				<td>length[0:16]</td>
-				<td></td>
-				<td><input type="text" id="field12" data-validate="length[0:16]" value="asdfgahsdfghasdfghasdfghasdfgh"/></td>
-			</tr>
-			<tr>
-				<td>length[6:16]</td>
-				<td></td>
-				<td><input type="text" id="field13" data-validate="length[6:16]" value="asdfgahsdfghasdfghasdfghasdfgh"/></td>
-			</tr>
-			
-			<tr>
-				<td></td>
-				<td></td>
-				<td><input type="submit"/></td>
-			</tr>
-			
-		</table>
-		</form>
 
-		
-	</div>
-</div>
+<p>TODO: an example of validation being applied to form elements that are injected into the DOM asynchronously</p>
+
+
+
 </body>
 </html>
