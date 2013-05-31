@@ -55,7 +55,8 @@
 					});
 				}
 				
-				self.submit(function(){ // here we assume that self is the enclosing <form>. TODO: refactor this to allow validation on a custom event, or check if this is indeed a form first.
+				// todo: check that this element is a <form> before we assume it'll have a submit() event
+				self.submit(function(){ // here we assume that self is the enclosing <form>
 					var allvalid = methods.validateAll.apply(self);
 					return allvalid;
 				});
@@ -64,18 +65,28 @@
 			
 		},
 
+		/**
+		* register
+		* adds an element to the elements collection
+		*/
 		register: function(element){
 			var self = $(this);
 			self.data('elements').push(element);
 			return true;
 		},
 
+		/**
+		* unregister
+		* removes an element from the elements collection
+		*/
 		unregister: function(element){
 			var self = $(this);
 			var newarr = [];
 			var arr = self.data('elements');
+			// this is a weird way to remove an element from an array
 			for(i=0;i<arr.length;i++){
 				if ($(arr[i])[0] == $(element)[0]){
+					// don't add it.
 				} else {
 					newarr.push(arr[i]);
 				}
@@ -83,6 +94,11 @@
 			self.data('elements',newarr);
 		},
 
+		/**
+		* readrules
+		* given an element, will read its data-validate attribute, parse it, and build 
+		* the "rules", "arguments" and "not" data objects that are used for validation
+		*/
 		readrules:function(element){
 			$element = $(element);
 			var self = $(this);
@@ -142,6 +158,12 @@
 			return true;
 		},
 
+		/**
+		* validateAll
+		* loops through all the elements in "elements" and performs validation.
+		* This is typically the function called on form submission.
+		* the loop breaks when it finds the first "false".
+		*/
 		validateAll: function(){
 			var self = $(this);
 			if ($.isFunction(plugin.options.onBeforeValidateAll)){
@@ -172,6 +194,11 @@
 			return allValid;
 		},
 		
+		/**
+		* validate
+		* executes all the functions in the "rules" using the values in 
+		* "arguments" and "not" as arguments 0 and 1
+		*/
 		validate: function(element){
 			var self = $(this);
 			if ($.isFunction(plugin.options.onBeforeValidate)){
@@ -213,6 +240,10 @@
 			return thisisvalid;
 		},
 		
+		/**
+		* errorindicator
+		* governs the behaviour of error messaging
+		*/
 		errorindicator: function(element,message){
 			var self = this;
 			element.focus();
@@ -227,7 +258,29 @@
 			return true;
 		},
 		
-		addrule: function(element,ruleobj){
+		/**
+		* addrule
+		* adds a function to the rules collection
+		*/
+		addrule: function(name,func){
+			// todo. STUB!
+		},
+		
+		/**
+		* removerule
+		* removes a function to the rules collection
+		*/
+		removerule: function(name){
+			// todo. STUB!
+		},
+		
+		
+		
+		/**
+		* applyrule
+		* adds a rule to an element
+		*/
+		applyrule: function(element,ruleobj){
 			var self = this;
 			if (element.data('rules')){
 				$.merge(element.data('rules'),ruleobj);
@@ -236,16 +289,26 @@
 			}
 		},
 		
-		removerule: function(element,rulename){
-			// removes a rule from an element
+		/**
+		* revokerule
+		* removes a rule from an element
+		*/
+		revokerule: function(element,rulename){
 			// todo. STUB!
 		},
 		
+		/**
+		* ischildtype
+		* returns true if the element is a group of radio or checkboxes
+		*/
 		ischildtype: function(element){
-			// returns true if the element is a group of radio or checkboxes
 			// todo. STUB!
 		},
 		
+		/**
+		* showbubble
+		* manages the visual positioning of the growler bubble
+		*/
 		showbubble : function(element,message) {
 			var self = this;
 			// shows the error bubble.
@@ -502,7 +565,15 @@
 			return {'valid':true};
 		}
 	};
-		
+
+
+
+
+
+	/**
+	* MAIN PLUGIN SETUP
+	* 
+	*/
 	$.fn.chloroform = function(method) {
 		if(methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));

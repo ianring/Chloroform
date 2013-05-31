@@ -224,6 +224,10 @@ For example, the plugin <i>elements</i> array might contain: [field1,field2,fiel
 
 The validation rules applied to each element are stored in its data object. The rules inhabit two named objects in the element's data: rules and arguments.
 
+#### rules, arguments, and not
+
+Each element has these three elements in its data object
+
 #### element.data('rules')
 
 element.data('rules') is an object - used like a named associative array - of functions. Each function is named, and doesn't matter if it's one of Cholroform's built-in preset functions, or a custom one.
