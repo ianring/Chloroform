@@ -7,15 +7,45 @@
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	$('#myform').chloroform();
 });
+
+function customrule1(element,not){
+	$val = element.val();
+	
+	var d = new Date();
+	var n = d.getDay();
+	if (n == 6){
+		if (element.prop("checked")) {
+			return {'valid':true};
+		} else {
+			return {'valid':false,'message':'it is saturday!'};
+		}
+	} else {
+		if (element.prop("checked")) {
+			return {'valid':false,'message':'it is not saturday!'};
+		} else {
+			return {'valid':true};
+		}
+	}
+}
+
+
+
 </script>
 </head>
 <body>
 <h1>Chloroform</h1>
 
 <h2>custom rules</h2>
-<p>TODO: example of a form being validated using custom rules</p>
 
+<form id="myform">
+
+	Check this box, only if today is Saturday:
+	<input type="checkbox" data-validate="customrule1" />
+	
+<input type="submit"/>
+</form>
 
 
 </body>

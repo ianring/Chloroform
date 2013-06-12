@@ -7,15 +7,34 @@
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	
+	$('#myform').chloroform({
+		'onBeforeValidateAll':function(form){
+			form.find('input[type=submit]').prop('disabled',true);
+			alert('the submit button is temporarily disabled')
+			return true;
+		},
+		'onAfterValidateAll':function(form,isValid){
+			form.find('input[type=submit]').prop('disabled',false);
+			return isValid;
+		}
+	});
+	
 });
 </script>
 </head>
 <body>
 <h1>Chloroform</h1>
 
-<h2>changing arguments dynamically</h2>
+<h2>using the onBeforeValidateAll() callback</h2>
 
-<p>TODO: example of changing the arguments dynamically</p>
+<p>A perfect use for the onBeforeValidateAll() callback is to disable the submit button, to prevent double-clicks.</p>
+
+<form id="myform">
+	<input type="text" value="hello world" data-validate="length(20)" />
+	<input type="submit" value="Submit" />
+</form>
+
 
 </body>
 </html>

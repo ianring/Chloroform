@@ -7,15 +7,30 @@
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	
+	$('#myform').chloroform({
+		'onAfterValidateAll':function(form, isValid){
+			// this function returns true or false. Its return value will override the validation of the entire form.
+			if (isValid) {
+				return confirm('The form is valid. \n\nAre you sure you want to submit this form?');
+			} else {
+				return false;
+			}
+		}
+	});
+	
 });
 </script>
 </head>
 <body>
 <h1>Chloroform</h1>
 
-<h2>changing arguments dynamically</h2>
+<h2>using the onAfterValidateAll() callback</h2>
 
-<p>TODO: example of changing the arguments dynamically</p>
+<form id="myform">
+	<input type="text" value="hello world" data-validate="length(5)" />
+	<input type="submit" value="Submit" />
+</form>
 
 </body>
 </html>

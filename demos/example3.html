@@ -7,6 +7,30 @@
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	
+	// the checkbox that's already on the page will be validated, just by initializing chloroform
+	$('#myform').chloroform();
+	$('#myform2').chloroform();
+	
+	// elements that are added dynamically don't get noticed by chloroform, unless you
+	// register them
+	$('#add_field').click(function(){
+		var newfield = $('<input type="checkbox" data-validate="required"></input>');
+		$('#fields').append(newfield);
+		
+		// the new field must be registered with chloroform. Here's the syntax to do that.
+		$('#myform').chloroform('register', newfield);
+		
+	});
+
+	$('#add_field2').click(function(){
+		var newfield2 = $('<input type="checkbox" name="choices2" data-validate="choices(3)"></input>');
+		$('#fields2').append(newfield2);
+		
+		// the new field must be registered with chloroform. Here's the syntax to do that.
+		$('#myform2').chloroform('register', newfield2);
+		
+	});
 
 });
 </script>
@@ -16,9 +40,25 @@ jQuery(document).ready(function($) {
 
 <h2>dynamic form elements</h2>
 
-<p>TODO: an example of validation being applied to form elements that are injected into the DOM asynchronously</p>
+<p>These checkboxes must be checked. They are "required". Click the button to add more of them.</p>
 
+<form id="myform">
+	<div id="fields">
+		<input type="checkbox" data-validate="required" />
+	</div>
+	<input type="submit" value="Submit" />
+	<input type="button" id="add_field" value="Add another checkbox"/>
+</form>
 
+<p>Here's a neat example. You need to check at least three of these checkboxes. But there's only one of them! Click the button to add some more.</p>
+
+<form id="myform2">
+	<div id="fields2">
+		<input type="checkbox" name="choices2" data-validate="choices(3)" />
+	</div>
+	<input type="submit" value="Submit" />
+	<input type="button" id="add_field2" value="Add another checkbox"/>
+</form>
 
 </body>
 </html>

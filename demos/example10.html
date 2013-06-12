@@ -7,6 +7,7 @@
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	$('#myform').chloroform();
 });
 </script>
 </head>
@@ -15,7 +16,27 @@ jQuery(document).ready(function($) {
 
 <h2>server-side AJAX validation</h2>
 
-<p>TODO: example of AJAX validation</p>
+<p>Using a built-in AJAX response</p>
+
+<p>This one will never validate</p>
+<form id="myform">
+	<div>
+		<input name="name" type="text" value="foo" data-validate="required"/>
+		<input id="mytextinput" name="myfield" type="text" value="foo" data-validate="ajax(fake-ajax-bad.json)"/>
+	</div>
+	<input type="submit" value="Submit" />
+</form>
+
+<p>This one will</p>
+<form id="myform">
+	<div>
+		<input id="mytextinput1" name="myfield1" type="text" value="foo1" data-validate="ajax(fake-ajax-good.json)"/>
+		<input id="mytextinput2" name="myfield2" type="text" value="foo2" data-validate="ajax(fake-ajax-good.json)"/>
+		<input id="mytextinput3" name="myfield3" type="text" value="foo3" data-validate="ajax(fake-ajax-good.json)"/>
+	</div>
+	<input type="submit" value="Submit" />
+</form>
+
 
 </body>
 </html>

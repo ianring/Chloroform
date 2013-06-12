@@ -3,19 +3,53 @@
 <link href="../chloroform.css" rel="stylesheet"/>
 <link href="style.css" rel="stylesheet"/>
 
+<style>
+.validating{
+	background:red;
+}
+.validated{
+	background:green;
+}
+</style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <script src="../chloroform.js"></script>
 <script>
 jQuery(document).ready(function($) {
+	
+	$('#myform').chloroform({
+		'onBeforeValidate':function(element){
+			element.addClass('validating');
+			return true;
+		},
+		'onAfterValidate':function(element, isValid){
+			if (!isValid) {
+				alert('oh Snap!');
+			}
+			element.removeClass('validating');
+			return isValid;
+		}
+	});
+	
 });
 </script>
 </head>
 <body>
 <h1>Chloroform</h1>
 
-<h2>changing arguments dynamically</h2>
+<h2>using the onAfterValidate() callback</h2>
 
-<p>TODO: example of changing the arguments dynamically</p>
+<form id="myform">
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<div><input type="text" value="foo" data-validate="length(5)" /></div>
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<div><input type="text" value="hello world" data-validate="length(5)" /></div>
+	<input type="submit" value="Submit" />
+</form>
 
 </body>
 </html>

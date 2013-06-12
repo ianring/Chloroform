@@ -17,9 +17,9 @@
 				plugin.form = $(this);
 				
 				var settings = {
-					lang: 'en', 						// default language - i18n has not been implemented yet
-					validateDataAttr: 'data-validate', 	// name of the attribute which stores what validation rules to apply
-					scrollToBubble: true,				// if true, then a bubble popup will scroll into view.
+					lang: 'en', 							// default language - i18n has not been implemented yet
+					validateDataAttr: 'data-validate', 		// name of the attribute which stores what validation rules to apply
+					scrollToBubble: true,					// if true, then a bubble popup will scroll into view. default: true.
 					
 					// callback functions
 					onBeforeValidateAll:null,
@@ -36,6 +36,7 @@
 				
 				self.data('elements',[]);
 				
+				// todo: get this working with select boxes and textareas too.
 				var inputs = plugin.form.find(':input[' + settings.validateDataAttr + ']');
 				
 				inputs.each(function(idx,elem){
@@ -72,6 +73,7 @@
 		register: function(element){
 			var self = $(this);
 			self.data('elements').push(element);
+			methods.readrules($(element));
 			return true;
 		},
 
@@ -97,16 +99,19 @@
 		/**
 		* readrules
 		* given an element, will read its data-validate attribute, parse it, and build 
-		* the "rules", "arguments" and "not" data objects that are used for validation
+		* the "rules", "arguments" and "not" data objects that are used for validation.
 		*/
 		readrules:function(element){
+			
 			$element = $(element);
 			var self = $(this);
-			var actionsStr = $.trim($(element).attr(plugin.options.validateDataAttr).replace(new RegExp('\\s*\\' + plugin.options.validatorsDelimiter + '\\s*', 'g'), plugin.options.validatorsDelimiter));
+			var actionsStr = $.trim($(element).attr(plugin.options.validateDataAttr));
 			is_valid = 0;
 			if(!actionsStr){
 				return true;
 			}
+			
+			// initialize some of the objects
 			if(!$element.data('rules')){
 				$element.data('rules',{});
 			}
@@ -116,14 +121,23 @@
 			if(!$element.data('not')){
 				$element.data('not',{});
 			}
-			var actions = $(actionsStr.split(","));
+			
+			/*
+			an actionsStr might look like these:
+
+			"contains(3,4);regex(/[a-z]{0-9}/)"
+
+			this function must be capable of parsing something that complicated
+			
+			*/
+			var actions = $(actionsStr.split(";"));
 			actions.each(function(idx,rulestring){
 				
 				// see if the rulename has parameters
-				var ruleparts = rulestring.match(/^(.*?)\[(.*?)\]/);
+				var ruleparts = rulestring.match(/^(.*?)\((.*?)\)/);
 				if (ruleparts && ruleparts.length == 3){
 					rulename = ruleparts[1];
-					argarray = ruleparts[2].split(":")
+					argarray = ruleparts[2].split(",")
 				} else {
 					rulename = rulestring;
 					argarray = [];
@@ -167,7 +181,7 @@
 		validateAll: function(){
 			var self = $(this);
 			if ($.isFunction(plugin.options.onBeforeValidateAll)){
-				r = plugin.options.onBeforeValidateAll();
+				r = plugin.options.onBeforeValidateAll(self);
 				if (!r){
 					return false;
 				}
@@ -175,7 +189,9 @@
 			// runs the validation on all elements. aborts on the first error found.
 			var isvalid = false; // this fixes a bug in IE. strange.
 			var allValid = true;
+			console.log('validating '+self.data('elements').length+' elements');
 			for(i=0;i<self.data('elements').length;i++){
+				console.log('element '+i);
 				element = self.data('elements')[i];
 				isvalid = methods.validate($(element));
 				if (isvalid){
@@ -185,7 +201,7 @@
 				}
 			}
 			if ($.isFunction(plugin.options.onAfterValidateAll)){
-				r = plugin.options.onAfterValidateAll(allValid);
+				r = plugin.options.onAfterValidateAll(self, allValid);
 				if (!r){
 					return false;
 				}
@@ -202,7 +218,7 @@
 		validate: function(element){
 			var self = $(this);
 			if ($.isFunction(plugin.options.onBeforeValidate)){
-				r = plugin.options.onBeforeValidate();
+				r = plugin.options.onBeforeValidate(element);
 				if (!r){
 					return false;
 				}
@@ -224,6 +240,7 @@
 				isvalid = rules[rulename].apply(this,args);
 				
 				if (isvalid.valid){
+					// do nothing.
 				} else {
 					methods.errorindicator(element,isvalid.message);
 					thisisvalid = false;
@@ -231,7 +248,7 @@
 				}
 			}
 			if ($.isFunction(plugin.options.onAfterValidate)){
-				r = plugin.options.onAfterValidate(thisisvalid);
+				r = plugin.options.onAfterValidate(element, thisisvalid);
 				if (!r){
 					return false;
 				}
@@ -305,6 +322,7 @@
 			// todo. STUB!
 		},
 		
+		
 		/**
 		* showbubble
 		* manages the visual positioning of the growler bubble
@@ -312,9 +330,6 @@
 		showbubble : function(element,message) {
 			var self = this;
 			// shows the error bubble.
-			if (plugin.options.scrollToError){
-				// TODO: scroll to the element
-			}
 			$('#bubbletext').html(message);
 			plugin.bubblecontainer.removeClass('hide');
 			
@@ -343,16 +358,11 @@
 			return true;
 		},
 		scrolltobubble:function(){
-			// needs work.
+			var bubbleoffset = parseInt(plugin.bubblecontainer.offset().top);
+			destination = bubbleoffset - 18;
+			if (destination < 0) {destination = 0;}
 			
-			// check the top and bottom of the bubble and the element it's pointing to
-			// if either of them are above the frame, scroll to the min() of the two tops
-			//if either of them are below the frame, scroll to the max() of the two bottoms
-			
-//			var bubbleoffset = plugin.bubblecontainer.offset();
-//			destination = bubbleoffset.top - 18;
-//			if (destination < 0) {destination = 0;}
-//			$(document).scrollTop(destination);
+			$('body,html').animate({scrollTop: destination}, 800);
 		},
 		hidebubble: function(){
 			plugin.bubblecontainer.addClass('hide');
@@ -522,9 +532,59 @@
 			return {'valid':true};
 		},
 		'choices':function(){
+			console.log('choices');
 			var elem = arguments[0];
 			var not = arguments[1];
-			// stub
+			
+			// this is a member of a group of elements.
+			var name = elem.attr('name');
+			
+			$chosen=0;
+			
+			// checkboxes
+			if (elem.is("input:checkbox")){
+				$others = elem.closest('form').find(':input[name='+name+']');
+				if ($others.length > 1){
+					console.log($others);
+				}
+				for(var j=0;j<$others.length;j++){
+					if ( $($others[j]).prop('checked')){
+						$chosen++;
+					}
+				}
+			}
+			// checkboxes
+			if (elem.is("select")){
+				$chosen = elem.find(':selected').length;
+			}
+			
+			if (arguments.length == 3){
+				// if only one argument is provided, it's interpreted as "min"
+				var min = arguments[2];
+				if ($chosen < min){
+					return {'valid':false,'message':'you must choose at least '+min+' of these'};
+				}
+				return {'valid':true};
+			}
+			if (arguments.length == 4){
+				// if two arguments are provided, they are min and max
+				var min = arguments[2];
+				var max = arguments[3];
+				
+				if (min == max){
+					if ($chosen < min || $chosen > max){
+						return not?{'valid':true}:{'valid':false,'message':'you must choose exactly '+min+' of these'};
+					}
+				} else {
+					if ($chosen < min){
+						return not?{'valid':true}:{'valid':false,'message':'you must choose at least '+min+' of these'};
+					}
+					if ($chosen > max){
+						return not?{'valid':true}:{'valid':false,'message':'you must choose less than '+max+' of these'};
+					}
+				}
+				return {'valid':true};
+			}
 			return {'valid':true};
 		},
 		'contains':function(){
@@ -563,6 +623,35 @@
 		'url':function(){
 			// stub!!
 			return {'valid':true};
+		},
+		'ajax':function(){
+			var elem = arguments[0];
+			var not = arguments[1];
+			var url = arguments[2];
+			var form = elem.closest('form');
+			var val = elem.val();
+			var name = elem.attr('name');
+			data = {};
+			data[name] = val;
+			$.ajax({
+				async: false,
+				'url': url,
+				'type': 'get',
+				'data': data,
+				'dataType': 'json'
+			}).done(function( data ){
+				
+				if (data.valid){
+					console.log('the ajax requests, they have passed');
+					form.submit();
+				} else {
+					element = elem;
+					message = data.message;
+					form.chloroform('showbubble',element,message);
+				}
+				
+			});
+			return false;
 		}
 	};
 
