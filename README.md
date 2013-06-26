@@ -43,10 +43,10 @@ The rules are named. They have names like "numeric" and "required". To apply a r
 
 ### Multiple Rules
 
-To add multiple rules to the same form element, separate the rule names with a comma.
+To add multiple rules to the same form element, separate the rule names with a semicolon.
 
 	<form id="myform">
-	<input id="myfield" type="text" value="123" data-validate="required,email"/>
+	<input id="myfield" type="text" value="123" data-validate="required;email"/>
 	<input type="submit" value="Save"/>
 	</form>
 
@@ -74,14 +74,16 @@ You could also prevent words from being present in the value, by putting a NOT o
 
 ### Rules with Arguments
 
-Some require arguments. For example, the "length" rule takes either one or two arguments. Arguments are expressed in square brackets, separated by a colon.
+Some require arguments. For example, the "length" rule takes either one or two arguments. Arguments are expressed in round brackets, with multiple arguments separated by a comma.
 
 For example, the field "myfield" below must be between 6 and 16 characters.
 
 	<form id="myform">
-	<input id="myfield" type="text" value="123" data-validate="length[6:16]"/>
+	<input id="myfield" type="text" value="123" data-validate="length(6,16)"/>
 	<input type="submit" value="Save"/>
 	</form>
+
+It looks like a function call, doesn't it? That's deliberate.
 
 ### Built-In Rules
 
@@ -141,7 +143,7 @@ Here's one that's a little more complex, showing how the wording of the error me
 
 This rule would be applied to this form element. Notice the parameter in square brackets, which is ultimately passed along as the third argument of the maximum() function.
 
-	<input type="text" id="field7" data-validate="maximum[5]" value="123"/>
+	<input type="text" id="field7" data-validate="maximum(5)" value="123"/>
 
 
 ## Chloroform Options
