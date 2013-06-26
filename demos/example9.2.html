@@ -1,0 +1,50 @@
+<html>
+<head>
+<link href="../chloroform/themes/earthygreen/earthygreen.css" rel="stylesheet"/>
+<link href="../chloroform/themes/blackbubble/blackbubble.css" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script src="../chloroform/chloroform.js"></script>
+<script>
+jQuery(document).ready(function($) {
+	
+	$('#myform').chloroform({
+		'theme':'earthygreen',
+		'scrollToBubble':false
+	});
+	
+	$('#myform2').chloroform({
+		'theme':'blackbubble',
+		'scrollToBubble':true
+	});
+	
+});
+
+</script>
+</head>
+<body>
+<h1>Chloroform</h1>
+
+<h2>using multiple themes on the same page</h2>
+
+<form id="myform">
+
+	Check this box:
+	<input type="checkbox" data-validate="required" />
+	
+<input type="submit"/>
+</form>
+
+<form id="myform2">
+
+	Check this box:
+	<input type="checkbox" data-validate="required" />
+	
+<input type="submit"/>
+</form>
+
+
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
+<script src="chloroform/chloroform.js"></script>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<style>
+li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 { 
+	list-style-type: decimal !important 
+}
+</style>
+
+<link rel="stylesheet" href="assets/prettify.css" />
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="chloroform/themes/blackbubble/blackbubble.css" />
+<link rel="stylesheet" href="assets/style.css" />
+<script>
+function fakesubmit(){
+	alert('if this was not a demo, this form would be submitting right now.');
+	return false;
+}
+$(document).ready(function(){
+//	$('#formexample1').chloroform();
+	$('#formexample2').chloroform({
+		'onAfterValidateAll':fakesubmit
+	});
+});
+</script>
+
+</head>
+<body>
+
+<div class="container">
+
+	<div class="row">
+		<div class="span12">
+			
+			the logo does not exist yet. but it will go here.
+		
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span4">
+			<h2>Why Chloroform?</h2>
+			<p>Because other form validators are so damned annoying. When they work, they're not flexible. When they're easy to install, they're buggy. When they're flexible, they're complicated.</p>
+			<p>Chloroform exists because the world needs a really, really good client-side form validation tool.</p>
+		</div>
+		<div class="span4">
+			<h2>Easy</h2>
+			<p>Start with the simplest example. You'll have form validation in seconds. Then dig in, and you'll see there's a lot you can do with this little power tool.</p>
+		</div>
+		<div class="span4">
+			<h2>Help</h2>
+			<p>Chloroform is open-source. If you can make it better, send a git pull request.</p>
+			<p><a href="https://github.com/ianring/Chloroform">View on GitHub</a></p>
+
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span9">
+		
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#example1" data-toggle="tab">Example</a></li>
+				<li><a href="#html1" data-toggle="tab">HTML</a></li>
+				<li><a href="#js1" data-toggle="tab">JavaScript</a></li>
+			</ul>		
+				
+			<div class="tab-content">
+				<div class="tab-pane active" id="example1">
+					
+					<form id="formexample2">
+						<fieldset>
+							<legend>Basic Validation</legend>
+							<label>Put a Number in here</label>
+							<input type="text" placeholder="must be a number, but empty is OK too" data-validate="numeric" class="input-xlarge" />
+							<label class="checkbox">
+								<input type="checkbox" data-validate="required"> Check this
+							</label>
+							<button type="submit" class="btn">Submit</button>
+						</fieldset>
+					</form>	
+					
+				</div>
+				<div class="tab-pane" id="html1">
+
+<pre class="prettyprint linenums">
+&lt;form id="formexample2">
+	&lt;fieldset>
+		&lt;legend>Basic Validation&lt;/legend>
+		&lt;label>Put a Number in here&lt;/label>
+
+		&lt;input type="text" placeholder="must be a number, but empty is OK too" data-validate="numeric" class="input-xlarge" />
+		&lt;label class="checkbox">
+			&lt;input type="checkbox" data-validate="required"> Check this
+		&lt;/label>
+		&lt;button type="submit" class="btn">Submit&lt;/button>
+	&lt;/fieldset>
+&lt;/form>	
+</pre>
+				
+				</div>
+				<div class="tab-pane" id="js1">
+				
+<pre class="prettyprint linenums">
+&lt;script>
+$(document).ready(function(){
+	$('#formexample2').chloroform();
+});
+&lt;/script>
+</pre>
+				
+				</div>
+			</div>
+		
+		</div>
+		<div class="span3">
+			<h2>The Basics</h2>
+			<p>The simplest use of Chloroform is to make sure that checkboxes are checked, text fields aren't empty, and fields don't contain bad values.</p>
+		</div>
+	</div>
+
+</div>
+
+
+</body>
+</html>

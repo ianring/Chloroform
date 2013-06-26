@@ -1,3 +1,4 @@
+/*
 .errorbubble{
 	position:absolute;
 	border-radius:10px;
@@ -9,17 +10,20 @@
 	white-space: nowrap;
 
 }
+*/
+
+
 .hide{
 	display:none;
 }
 
 
-
 /**** Speech Bubble Icons *****/
-.bubble {
+
+.blackbubble .bubble {
   position: relative;
 }
-.bubble .bubbletext {
+.blackbubble .bubble .bubbletext {
 	font-size:13px;
 	font-style: normal;
 	background: #000;
@@ -31,7 +35,7 @@
 	border:2px solid black;
 	position: relative;
 }
-.bubble .down .point {
+.blackbubble .bubble .down .point {
 	width: 0;
 	height: 0;
 	position: absolute;
@@ -43,7 +47,7 @@
 	border-bottom: 20px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.bubble .up .point {
+.blackbubble .bubble .up .point {
 	width: 0;
 	height: 0;
 	position: absolute;
@@ -55,7 +59,7 @@
 	border-top: 20px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.bubble .point2 {
+.blackbubble .bubble .point2 {
 	visibility:hidden;
 	z-index:99;
 	width: 0;
@@ -69,8 +73,8 @@
 	border-bottom: 14px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.bubble .closer{
-	background:url('/images/btn_close_x.png');
+.blackbubble .bubble .closer{
+	background:url('close_button.png');
 	display:block;
 	position:absolute;
 	width:42px;
@@ -79,11 +83,11 @@
 	cursor:pointer;
 }
 
-.bubble .down .closer{
+.blackbubble .bubble .down .closer{
 	top:-33px;
 	right:-20px;
 }
-.bubble .up .closer{
+.blackbubble .bubble .up .closer{
 	top:6px;
 	right:-20px;
 }

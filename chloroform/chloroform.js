@@ -4,6 +4,22 @@
  * version 0.0.0.1. still lots of work needed to make this truly awesome
 */
 
+/*
+
+form.data contains 
+	- options, an object of config options
+	- elements , an array of elements
+
+element.data contains:
+	- rules,
+		an object full of named functions, keyed by a slug name like "length" or "required"
+	- arguments,
+		an object containing the arguments for those named functions
+	- not
+		an object containing the boolean "not" operator for those named functions
+
+*/
+
 ;(function($) {
 	
 	var plugin = {};
@@ -12,11 +28,13 @@
 		
 		init : function(options) {
 			var self = $(this);
-			return this.each(function() {
+			return this.each(function(idx, elem) {
 				
-				plugin.form = $(this);
+				var form = $(elem);
+				console.log(form);
 				
-				var settings = {
+				var defaults = {
+					theme: 'blackbubble', 					// default theme, blackbubble ships with chloroform
 					lang: 'en', 							// default language - i18n has not been implemented yet
 					validateDataAttr: 'data-validate', 		// name of the attribute which stores what validation rules to apply
 					scrollToBubble: true,					// if true, then a bubble popup will scroll into view. default: true.
@@ -28,20 +46,21 @@
 					onAfterValidate:null
 					
 				};
+				
+				form.data('options', defaults);
 				if(options) {
-					$.extend(settings, options);
+					form.data('options', $.extend({}, defaults, options));
 				}
+				console.log(form.data('options'));
 				
-				plugin.options = settings;
-				
-				self.data('elements',[]);
+				form.data('elements',[]);
 				
 				// todo: get this working with select boxes and textareas too.
-				var inputs = plugin.form.find(':input[' + settings.validateDataAttr + ']');
+				var inputs = form.find(':input[' + form.data('options').validateDataAttr + ']');
 				
 				inputs.each(function(idx,elem){
-					methods.register.apply(self,[$(elem)]);
-					methods.readrules.apply(self,[$(elem)]);
+					methods.register.apply(form,[$(elem)]);
+					methods.readrules.apply(form,[$(elem)]);
 				});
 				
 				// note here that the bubble is controlled by the plugin, not an instance of the plugin. This should be changed
@@ -50,7 +69,8 @@
 					plugin.bubblecontainer = $('#bubblecontainer');
 				} else {
 					plugin.bubblecontainer = $("<div id='bubblecontainer' class='bubblecontainer'></div>").appendTo(document.body).addClass('hide');
-					$('	<span class="bubble" href="#"><span id="bubbledirection" class="down"><span id="bubblecloser" class="closer"></span><span class="point"></span><span class="point2"></span><span id="bubbletext" class="bubbletext">message</span></span></span>').prependTo(plugin.bubblecontainer);
+					plugin.bubblethemer = $("<div id='bubblethemer' class=''></div>").appendTo(plugin.bubblecontainer);
+					$('	<span class="bubble" href="#"><span id="bubbledirection" class="down"><span id="bubblecloser" class="closer"></span><span class="point"></span><span class="point2"></span><span id="bubbletext" class="bubbletext">message</span></span></span>').prependTo(plugin.bubblethemer);
 					$('#bubblecloser').click(function(){
 						methods.hidebubble.apply(self);
 					});
@@ -71,8 +91,8 @@
 		* adds an element to the elements collection
 		*/
 		register: function(element){
-			var self = $(this);
-			self.data('elements').push(element);
+			var form = $(this);
+			form.data('elements').push(element);
 			methods.readrules($(element));
 			return true;
 		},
@@ -82,9 +102,9 @@
 		* removes an element from the elements collection
 		*/
 		unregister: function(element){
-			var self = $(this);
+			var form = $(this);
 			var newarr = [];
-			var arr = self.data('elements');
+			var arr = form.data('elements');
 			// this is a weird way to remove an element from an array
 			for(i=0;i<arr.length;i++){
 				if ($(arr[i])[0] == $(element)[0]){
@@ -93,7 +113,7 @@
 					newarr.push(arr[i]);
 				}
 			}
-			self.data('elements',newarr);
+			form.data('elements',newarr);
 		},
 
 		/**
@@ -102,10 +122,11 @@
 		* the "rules", "arguments" and "not" data objects that are used for validation.
 		*/
 		readrules:function(element){
-			
 			$element = $(element);
+			var form = $element.closest('form');
+			
 			var self = $(this);
-			var actionsStr = $.trim($(element).attr(plugin.options.validateDataAttr));
+			var actionsStr = $.trim($(element).attr(form.data('options').validateDataAttr));
 			is_valid = 0;
 			if(!actionsStr){
 				return true;
@@ -179,20 +200,23 @@
 		* the loop breaks when it finds the first "false".
 		*/
 		validateAll: function(){
-			var self = $(this);
-			if ($.isFunction(plugin.options.onBeforeValidateAll)){
-				r = plugin.options.onBeforeValidateAll(self);
+			console.log('validateAll()');
+			var form = $(this);
+			if ($.isFunction(form.data('options').onBeforeValidateAll)){
+				r = form.data('options').onBeforeValidateAll(form);
 				if (!r){
+					console.log('returning false from onBeforeValidateAll');
 					return false;
 				}
 			}
 			// runs the validation on all elements. aborts on the first error found.
 			var isvalid = false; // this fixes a bug in IE. strange.
 			var allValid = true;
-			console.log('validating '+self.data('elements').length+' elements');
-			for(i=0;i<self.data('elements').length;i++){
+
+			console.log('validating '+form.data('elements').length+' elements');
+			for(i=0;i<form.data('elements').length;i++){
 				console.log('element '+i);
-				element = self.data('elements')[i];
+				element = form.data('elements')[i];
 				isvalid = methods.validate($(element));
 				if (isvalid){
 				} else {
@@ -200,9 +224,10 @@
 					break;
 				}
 			}
-			if ($.isFunction(plugin.options.onAfterValidateAll)){
-				r = plugin.options.onAfterValidateAll(self, allValid);
+			if ($.isFunction(form.data('options').onAfterValidateAll)){
+				r = form.data('options').onAfterValidateAll(form, allValid);
 				if (!r){
+					console.log('returning false from onAfterValidateAll');
 					return false;
 				}
 			}
@@ -216,9 +241,11 @@
 		* "arguments" and "not" as arguments 0 and 1
 		*/
 		validate: function(element){
-			var self = $(this);
-			if ($.isFunction(plugin.options.onBeforeValidate)){
-				r = plugin.options.onBeforeValidate(element);
+			console.log('validate()');
+			var form = $(element).closest('form');
+			console.log(form);
+			if ($.isFunction(form.data('options').onBeforeValidate)){
+				r = form.data('options').onBeforeValidate(element);
 				if (!r){
 					return false;
 				}
@@ -247,8 +274,8 @@
 					break;
 				}
 			}
-			if ($.isFunction(plugin.options.onAfterValidate)){
-				r = plugin.options.onAfterValidate(element, thisisvalid);
+			if ($.isFunction(form.data('options').onAfterValidate)){
+				r = form.data('options').onAfterValidate(element, thisisvalid);
 				if (!r){
 					return false;
 				}
@@ -272,6 +299,12 @@
 			element.keypress(function(){
 				methods.hidebubble();
 			});
+			// if this element is a checkbox or radio, then we react to a click
+			if (element.is(':checkbox') || element.is(':radio')){
+				element.click(function(){
+					methods.hidebubble();
+				})
+			}
 			return true;
 		},
 		
@@ -328,10 +361,18 @@
 		* manages the visual positioning of the growler bubble
 		*/
 		showbubble : function(element,message) {
+			
+			var form = element.closest('form');
+			
 			var self = this;
 			// shows the error bubble.
 			$('#bubbletext').html(message);
 			plugin.bubblecontainer.removeClass('hide');
+			
+			// do we need to change the theme?
+			if (!plugin.bubblethemer.hasClass(form.data('options').theme)){
+				plugin.bubblethemer.removeClass().addClass(form.data('options').theme);
+			}
 			
 			var pos = element.offset();
 			
@@ -352,7 +393,7 @@
 					'top':pos.top - plugin.bubblecontainer.outerHeight() - 20
 				});
 			}
-			if (plugin.options.scrollToBubble){
+			if (form.data('options').scrollToBubble){
 				methods.scrolltobubble();
 			}
 			return true;
