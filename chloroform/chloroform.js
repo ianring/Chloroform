@@ -375,6 +375,10 @@ element.data contains:
 			}
 			
 			var pos = element.offset();
+			if ($(element.data('surrogate-element')).length > 0){
+				pos = $(element.data('surrogate-element')).offset();
+			}
+			
 			
 			if (parseInt(pos.top) < 100){
 				// pointing up
