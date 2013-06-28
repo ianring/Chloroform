@@ -1,5 +1,9 @@
 body{
-	padding-top:50px;
+	padding-top:70px;
+	padding-bottom:150px;
+}
+.hide{
+	display:none !important;
 }
 .logo{
 	text-align: center;
@@ -31,22 +35,7 @@ form.example{
 	border: 1px solid #ddd;
 }
 
- #red, #green, #blue {
-float: left;
-clear: left;
-width: 300px;
-margin: 15px;
+
+li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 { 
+	list-style-type: decimal !important 
 }
-#swatch {
-width: 120px;
-height: 100px;
-margin-top: 18px;
-margin-left: 350px;
-background-image: none;
-}
-#red .ui-slider-range { background: #ef2929; }
-#red .ui-slider-handle { border-color: #ef2929; }
-#green .ui-slider-range { background: #8ae234; }
-#green .ui-slider-handle { border-color: #8ae234; }
-#blue .ui-slider-range { background: #729fcf; }
-#blue .ui-slider-handle { border-color: #729fcf; }

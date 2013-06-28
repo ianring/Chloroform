@@ -125,9 +125,32 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 </head>
 <body>
 
+<div class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container">
+          <a href="./index.html" class="brand">Grawlix</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="http://chloroform.grawlix.com">Chloroform</a>
+              </li>
+              <li class="">
+                <a href="http://tomatillo.grawlix.com">Tomatillo</a>
+              </li>
+              <li class="">
+                <a href="http://oubliette.grawlix.com">Oubliette</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
 <div class="navbar navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-inner">
+	<div class="navbar-inner">
+		<div class="container">
 			<a class="brand" href="#">Chloroform</a>
 			<ul class="nav">
 				<li class="active"><a href="#home">Home</a></li>

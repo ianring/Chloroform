@@ -27,6 +27,21 @@ $(document).ready(function(){
 	});
 	$( "#giftamount" ).val( $( "#slider-range-min" ).slider( "value" ) );
 	
+	// ------------------------------
+	
+	$('#example-nav li a').click(function(){
+		
+		var hash = this.hash.substr(1);
+		
+		$('#example-nav li').removeClass('active');
+		$(this).closest('li').addClass('active');
+		
+		$('.example').addClass('hide');
+		$('#'+hash).removeClass('hide');
+		// make the first tab active
+		$('#'+hash).find('ul.nav li:first a').click();
+		return false;
+	})
 	
 });
 
