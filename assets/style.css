@@ -1,0 +1,41 @@
+body{
+	padding-top:70px;
+	padding-bottom:150px;
+}
+.hide{
+	display:none !important;
+}
+.logo{
+	text-align: center;
+}
+
+.icon-github{
+	background:url('github-cat.png') no-repeat;
+	width:32px;
+	height:32px;
+	margin-right:10px;
+}
+
+.btn-superchunky{
+	font-size: 18px;
+	padding-top:6px;
+	padding-bottom:9px;
+	padding-right:32px;
+}
+.btn-superchunky i{
+	position:relative;
+	top:-5px;
+	float:left;
+}
+
+form.example{
+	background:#eee;
+	padding:18px;
+	border-radius:18px;
+	border: 1px solid #ddd;
+}
+
+
+li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 { 
+	list-style-type: decimal !important 
+}
