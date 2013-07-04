@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-	$('#demo1').chloroform();
+	$('#example1').chloroform();
 	
 });
 

@@ -1,4 +1,4 @@
-<form id="demo1">
+<form id="example1">
 	<table class="table">
 		<tr>
 			<th>data-validate attribute</th>

@@ -1,24 +1,5 @@
-<html>
-<head>
-<link href="../chloroform/themes/blackbubble/blackbubble.css" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet"/>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-<script src="../chloroform/chloroform.js"></script>
-<script>
-jQuery(document).ready(function($) {
-	// see how easy it is to validate two forms on the same page.
-	$('#editform1').chloroform();
-	$('#editform2').chloroform();
-});
-</script>
-</head>
-<body>
-<h1>Chloroform</h1>
-
-<h2>two forms, validated separately</h2>
-<form id="editform1">
-	<table border="1">
+<form id="example2-1">
+	<table>
 		<tr>
 			<th>data-validate attribute</th>
 			<th>Description</th>
@@ -43,8 +24,8 @@ jQuery(document).ready(function($) {
 	</table>
 </form>
 
-<form id="editform2">
-	<table border="1">
+<form id="example2-2">
+	<table>
 		<tr>
 			<th>data-validate attribute</th>
 			<th>Description</th>
@@ -68,9 +49,3 @@ jQuery(document).ready(function($) {
 		
 	</table>
 </form>
-
-		
-	</div>
-</div>
-</body>
-</html>

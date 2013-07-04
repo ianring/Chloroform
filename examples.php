@@ -9,11 +9,6 @@ $demos=array(
 		'example5'	=> 'changing arguments dynamically'
 	),
 	'Callback Functions' => array(
-		'example3'=>'validating dynamic form elements',
-		'example4' => 'custom rules',
-		'example5' => 'changing arguments dynamically'
-	),
-	'Callback Functions' => array(
 		'example6' => 'onBeforeValidateAll() callback',
 		'example7' => 'onAfterValidateAll() callback',
 		'example8' => 'onBeforeValidate() callback',
@@ -49,6 +44,7 @@ $demos=array(
 <link rel="stylesheet" href="assets/prettify.css" />
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" href="chloroform/themes/blackbubble/blackbubble.css" />
+<link rel="stylesheet" href="chloroform/themes/earthygreen/earthygreen.css" />
 <link rel="stylesheet" href="assets/style.css" />
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
@@ -77,10 +73,12 @@ $demos=array(
 			<ul id="example-nav" class="nav nav-pills nav-stacked">
 				
 				<?php
+				$first = true;
 				foreach($demos as $groupname=>$group){
 					echo '<li class="nav-header">' . $groupname . '</li>';
 					foreach($group as $key=>$name){
-						echo '<li><a href="#'.$key.'">'.$name.'</a></li>';
+						echo '<li class="'.($first?'active':'').'"><a href="#panel-'.$key.'">'.$name.'</a></li>';
+						$first = false;
 					}
 				}
 				?>
@@ -95,17 +93,22 @@ $demos=array(
 			<div class="examples">
 			
 				<?php
-				
+				$first = true;
 				foreach($demos as $groupname=>$group){
+					
 					foreach($group as $key=>$name){
 					
-						echo '<div class="example hide" id="'.$key.'">';
+						echo '<div class="example '.($first?'':'hide').'" id="panel-'.$key.'">';
+						
+						echo '<h3>'.$name.'</h3>';
 						
 						$tabs = array();
 						$panels = array();
+						$js = array();
+						$css = array();
 						
 						if (file_exists('examples/'.$key.".html.inc")){
-							$tabs[] = '<li><a href="#example'.$key.'" data-toggle="tab">Example</a></li>';
+							$tabs[] = '<li><a href="#example'.$key.'" data-toggle="tab" >Example</a></li>';
 							$tabs[] = '<li><a href="#html'.$key.'" data-toggle="tab">HTML</a></li>';
 							
 							$panel = '';
@@ -127,34 +130,45 @@ $demos=array(
 							$panel = '';
 							$panel .= '<div class="tab-pane" id="js'.$key.'">';
 							$panel .= '<pre class="prettyprint linenums">';
-							$panel .= htmlspecialchars(file_get_contents('examples/'.$key.".js.inc"));
+							$j = file_get_contents('examples/'.$key.".js.inc");
+							$panel .= htmlspecialchars($j);
 							$panel .= '</pre>';
 							$panel .= '</div>';
 							$panels[] = $panel;
+							$js[] = $j;
 						}
 						if (file_exists('examples/'.$key.".css.inc")){
 							$tabs[] = '<li><a href="#css'.$key.'" data-toggle="tab">CSS</a></li>';
 							$panel = '';
 							$panel .= '<div class="tab-pane" id="css'.$key.'">';
 							$panel .= '<pre class="prettyprint linenums">';
-							$panel .= htmlspecialchars(file_get_contents('examples/'.$key.".css.inc"));
+							$c = file_get_contents('examples/'.$key.".css.inc");
+							$panel .= htmlspecialchars($c);
 							$panel .= '</pre>';
 							$panel .= '</div>';
 							$panels[] = $panel;
+							$css[] = $c;
 						}
 						
 						echo '<ul class="nav nav-tabs">';
 						echo implode('',$tabs);
 						echo '</ul>		';
-				
+						
 						echo '<div class="tab-content">';
 						echo implode('',$panels);
 						echo '</div>';
-			
 						
 						echo '</div>';
-					
-					
+
+						echo '<script>';
+						echo implode('', $js);
+						echo '</script>';
+						
+						echo '<style>';
+						echo implode('', $css);
+						echo '</style>';
+						
+						$first = false;
 					}
 				}
 				

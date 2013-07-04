@@ -123,10 +123,10 @@ element.data contains:
 		*/
 		readrules:function(element){
 			$element = $(element);
-			var form = $element.closest('form');
+			var form = $($element.closest('form'));
 			
 			var self = $(this);
-			var actionsStr = $.trim($(element).attr(form.data('options').validateDataAttr));
+			var actionsStr = $.trim( $element.attr( form.data('options').validateDataAttr) );
 			is_valid = 0;
 			if(!actionsStr){
 				return true;
