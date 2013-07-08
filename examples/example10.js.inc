@@ -1,5 +1,3 @@
-jQuery(document).ready(function($) {
-	$('#myform').chloroform({
-		'theme':'earthygreen'
-	});
+$('#example10').chloroform({
+	'theme':'earthygreen'
 });

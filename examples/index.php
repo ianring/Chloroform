@@ -2,23 +2,28 @@
 
 $demos=array(
 	'Validators' => array(
-		'example1' => 'all built-in validators in one big form',
-		'example2' => 'two forms on the same page, validated separately',
-		'example3' => 'validating dynamic form elements',
+		'example1' => 'built-in validators',
+		'example2' => 'two forms on the same page',
+		'example3' => 'dynamic form elements',
 		'example4' => 'custom rules',
-		'example5'	=> 'changing arguments dynamically'
+		'example5'	=> 'dynamic arguments',
+		'example17' => 'aligning feedback with surrogate element',
+		'example18' => 'attaching to other events',
+		'example19' => 'validating a UI component'
 	),
 	'Callback Functions' => array(
-		'example6' => 'onBeforeValidateAll() callback',
-		'example7' => 'onAfterValidateAll() callback',
-		'example8' => 'onBeforeValidate() callback',
-		'example9' => 'onAfterValidate() callback'
+		'example6' => 'onBeforeValidateAll',
+		'example7' => 'onAfterValidateAll',
+		'example8' => 'onBeforeValidate',
+		'example9' => 'onAfterValidate'
 	),
-	'Styling' => array(
+	'Styling and i18n' => array(
 		'example10' => 'using a different theme',
-		'example11' => 'using multiple themes on the same page'
+		'example11' => 'using multiple themes on the same page',
+		'example20' => 'multiple languages',
+		'example21' => 'multiple languages in a custom rule'
 	),
-	'Public Methods' => array(
+	'Showing off Public Methods' => array(
 		'example12' => 'validate()',
 		'example13' => 'validateAll()',
 		'example14' => 'register() and unregister()',
@@ -30,41 +35,30 @@ $demos=array(
 ?><!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-<script src="bootstrap/js/bootstrap.js"></script>
-<script src="chloroform/chloroform.js"></script>
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<script src="../assets/jquery-1.7.0-min.js"></script>
+<script src="../bootstrap/js/bootstrap.js"></script>
+<script src="../chloroform/i18n/en.js"></script>
+<script src="../chloroform/i18n/fr.js"></script>
+<script src="../chloroform/chloroform.js"></script>
+<script src="../assets/run_prettify.js"></script>
 
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<script src="assets/script.js"></script>
+<script src="../assets/jquery-ui.js"></script>
+<script src="../assets/script.js"></script>
 
-<style>
-</style>
+<link rel="stylesheet" href="../assets/prettify.css" />
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="../chloroform/themes/blackbubble/blackbubble.css" />
+<link rel="stylesheet" href="../chloroform/themes/earthygreen/earthygreen.css" />
+<link rel="stylesheet" href="../chloroform/themes/mocha/mocha.css" />
+<link rel="stylesheet" href="../chloroform/themes/cutesy/cutesy.css" />
+<link rel="stylesheet" href="../assets/style.css" />
 
-<link rel="stylesheet" href="assets/prettify.css" />
-<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
-<link rel="stylesheet" href="chloroform/themes/blackbubble/blackbubble.css" />
-<link rel="stylesheet" href="chloroform/themes/earthygreen/earthygreen.css" />
-<link rel="stylesheet" href="assets/style.css" />
-
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="../assets/jquery-ui.css" />
 
 </head>
 <body>
 
-<div class="navbar navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-inner">
-			<a class="brand" href="#">Chloroform</a>
-			<ul class="nav">
-				<li class="active"><a href="#home">Home</a></li>
-				<li><a href="examples.php">Examples</a></li>
-				<li><a href="documentation.php">Documentation</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
-
+<?php include("../assets/navbar.php"); ?>
 
 <div class="container" id="home">
 	<div class="row">
@@ -107,42 +101,42 @@ $demos=array(
 						$js = array();
 						$css = array();
 						
-						if (file_exists('examples/'.$key.".html.inc")){
-							$tabs[] = '<li><a href="#example'.$key.'" data-toggle="tab" >Example</a></li>';
+						if (file_exists($key.".html.inc")){
+							$tabs[] = '<li class="active"><a href="#example'.$key.'" data-toggle="tab" >Example</a></li>';
 							$tabs[] = '<li><a href="#html'.$key.'" data-toggle="tab">HTML</a></li>';
 							
 							$panel = '';
-							$panel .= '<div class="tab-pane active" id="example'.$key.'">';
-							$panel .= file_get_contents('examples/'.$key.".html.inc");
+							$panel .= '<div class="tab-pane active panel-example" id="example'.$key.'">';
+							$panel .= file_get_contents($key.".html.inc");
 							$panel .= '</div>';
 							$panels[] = $panel;
 							
 							$panel = '';
-							$panel .= '<div class="tab-pane" id="html'.$key.'">';
+							$panel .= '<div class="tab-pane panel-html" id="html'.$key.'">';
 							$panel .= '<pre class="prettyprint linenums">';
-							$panel .= htmlspecialchars(file_get_contents('examples/'.$key.".html.inc"));
+							$panel .= htmlspecialchars(file_get_contents($key.".html.inc"));
 							$panel .= '</pre>';
 							$panel .= '</div>';
 							$panels[] = $panel;
 						}
-						if (file_exists('examples/'.$key.".js.inc")){
+						if (file_exists($key.".js.inc")){
 							$tabs[] = '<li><a href="#js'.$key.'" data-toggle="tab">JavaScript</a></li>';
 							$panel = '';
-							$panel .= '<div class="tab-pane" id="js'.$key.'">';
+							$panel .= '<div class="tab-pane panel-javascript" id="js'.$key.'">';
 							$panel .= '<pre class="prettyprint linenums">';
-							$j = file_get_contents('examples/'.$key.".js.inc");
+							$j = file_get_contents($key.".js.inc");
 							$panel .= htmlspecialchars($j);
 							$panel .= '</pre>';
 							$panel .= '</div>';
 							$panels[] = $panel;
 							$js[] = $j;
 						}
-						if (file_exists('examples/'.$key.".css.inc")){
+						if (file_exists($key.".css.inc")){
 							$tabs[] = '<li><a href="#css'.$key.'" data-toggle="tab">CSS</a></li>';
 							$panel = '';
-							$panel .= '<div class="tab-pane" id="css'.$key.'">';
+							$panel .= '<div class="tab-pane panel-css" id="css'.$key.'">';
 							$panel .= '<pre class="prettyprint linenums">';
-							$c = file_get_contents('examples/'.$key.".css.inc");
+							$c = file_get_contents($key.".css.inc");
 							$panel .= htmlspecialchars($c);
 							$panel .= '</pre>';
 							$panel .= '</div>';

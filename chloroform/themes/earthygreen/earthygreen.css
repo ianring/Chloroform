@@ -1,5 +1,21 @@
 .hide{
-	display:none;
+	display:none !important;
+}
+
+#bubblecontainer{
+	width:5px;
+	height:5px;
+	position:absolute;
+	border:1px solid #666;
+	background:red;
+}
+
+.earthygreen{
+  display: block;
+  left: -10px;
+  position: relative;
+  top: -42px;
+  width: 300px;	
 }
 
 /**** Speech Bubble Icons *****/

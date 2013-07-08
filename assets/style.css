@@ -28,14 +28,39 @@ body{
 	float:left;
 }
 
-form.example{
+form.example, .panel-example form{
 	background:#eee;
 	padding:18px;
 	border-radius:18px;
 	border: 1px solid #ddd;
 }
 
+tt{
+	color:#0e5a24;
+}
+
 
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 { 
 	list-style-type: decimal !important 
+}
+
+.methodsynopsis{
+	font-size:13px;
+	font-family: monospace;
+	font-weight: normal;
+	background:#f3f3f3;
+	padding:18px;
+	
+}
+.methodsynopsis .funcname{
+	color:#000;
+	font-weight:bold;
+}
+.methodsynopsis .type{
+	color:#660066;
+}
+
+.methodsynopsis .parameter{
+	color: #333366;
+	font-weight: bold;
 }

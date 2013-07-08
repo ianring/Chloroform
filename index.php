@@ -4,7 +4,7 @@ $example1 = <<<EOM
 <form id="formexample1" class="example">
 	<fieldset>
 		<label>Put a Number in here</label>
-		<input type="text" placeholder="must be a number" data-validate="numeric,required" class="input-xlarge" />
+		<input type="text" placeholder="must be a number" data-validate="numeric;required" class="input-xlarge" />
 		<label class="checkbox">
 			<input type="checkbox" data-validate="required"> Check this
 		</label>
@@ -56,20 +56,23 @@ $example3 = <<<EOM
 			<div class="span4">
 				<label>Pick a date for the party</label>
 				
-				<input type="hidden" id="datepickerinput" data-surrogate-element="#datepicker" data-validate="amibusythatday" />
+				<input type="hidden" id="datepickerinput" data-surrogate-element="#datepicker" data-validate="required;amibusythatday" />
 				<div id="datepicker"></div>
 			</div>
 			<div class="span3">
 
 				<p>
 				<label for="giftamount">Gift budget:</label>
-				<input type="text" id="giftamount" data-validate="min(100);max(150)" style="border: 0; color: #f6931f; font-weight: bold;" />
+				<input type="text" id="giftamount" data-validate="min(100);max(350)" style="border: 0; color: #f6931f; font-weight: bold;" />
 				</p>
 				<div id="slider-range-min"></div>
+				
+				<br/><br/>
+						<input type="submit" class="btn btn-primary" value="Submit" />
+
 
 			</div>
 		</div>
-		<button type="submit" class="btn btn-primary">Submit</button>
 	</fieldset>
 </form>	
 EOM;
@@ -97,16 +100,35 @@ EOM;
 
 
 
+$example4 = <<<EOM
+<form id="formexample4" class="example">
+	<fieldset>
+		<label>Email:</label>
+		<input type="text" placeholder="must be an email address" data-validate="email;required" class="input-xlarge" />
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</fieldset>
+</form>	
+EOM;
+$js4 = <<<EOM
+$('#formexample4').chloroform({
+	'theme':'cutesy'
+});
+EOM;
+
+
+
 
 ?><!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+
+<script src="assets/jquery-1.7.0-min.js"></script>
 <script src="bootstrap/js/bootstrap.js"></script>
 <script src="chloroform/chloroform.js"></script>
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<script src="chloroform/i18n/en.js"></script>
+<script src="assets/run_prettify.js"></script>
 
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="assets/jquery-ui.js"></script>
 <script src="assets/script.js"></script>
 
 <style>
@@ -118,9 +140,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 <link rel="stylesheet" href="assets/prettify.css" />
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" href="chloroform/themes/blackbubble/blackbubble.css" />
+<link rel="stylesheet" href="chloroform/themes/cutesy/cutesy.css" />
 <link rel="stylesheet" href="assets/style.css" />
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="assets/jquery-ui.css" />
 
 </head>
 <body>
@@ -148,18 +171,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
     
     
     
-<div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="brand" href="#">Chloroform</a>
-			<ul class="nav">
-				<li class="active"><a href="#home">Home</a></li>
-				<li><a href="examples.php">Examples</a></li>
-				<li><a href="documentation.php">Documentation</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
+<?php include("assets/navbar.php"); ?>
 
 
 <div class="container" id="home">
@@ -178,7 +190,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	<div class="row">
 		<div class="span4">
 			<h3>Why?</h3>
-			<p>Because other form validators are so damned annoying. When they work, they're not flexible. When they're easy to install, they're buggy. When they're flexible, they're complicated.</p>
 			<p>Chloroform exists because the world needs a really, really good client-side form validation tool.</p>
 		</div>
 		<div class="span4">
@@ -312,9 +323,51 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		<div class="span4">
 			<h3>Chloroform works with everything.</h3>
 			<p>You can put validation on anything. That's because Chloroform can bind validation to hidden elements, and feedback can be attached to any visible element.</p>
+			<p>That means you can apply Chloroform validation to all kinds of form components, no matter how sophisticated.</p>
 		</div>
 
 	</div>
+
+
+	<div class="row">
+		<hr />
+	</div>
+
+
+
+	<div class="row">
+		<div class="span4">
+			<h3>Themed Appearance</h3>
+			<p>It's easy to theme Chloroform to match the look &amp; feel of your site.</p>
+		</div>
+
+		<div class="span8">
+		
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#example4" data-toggle="tab">Example</a></li>
+				<li><a href="#html4" data-toggle="tab">HTML</a></li>
+				<li><a href="#js4" data-toggle="tab">JavaScript</a></li>
+			</ul>		
+				
+			<div class="tab-content">
+				<div class="tab-pane active" id="example4">
+					<?php echo $example4; ?>
+				</div>
+				<div class="tab-pane" id="html4">
+<pre class="prettyprint linenums">
+<?php echo htmlspecialchars($example4);?>
+</pre>
+				</div>
+				<div class="tab-pane" id="js4">
+<pre class="prettyprint linenums">
+<?php echo htmlspecialchars($js4);?>
+</pre>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
 
 </div>
 

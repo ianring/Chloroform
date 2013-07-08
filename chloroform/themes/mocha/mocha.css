@@ -10,56 +10,64 @@
 	background:red;
 }
 
-.blackbubble{
+.mocha{
   display: block;
-  left: -10px;
+  left: -11px;
   position: relative;
-  top: -42px;
-  width: 400px;	
+  top: -48px;
+  width: 300px;	
 }
 
 /**** Speech Bubble Icons *****/
-
-.blackbubble .bubble {
+.mocha .bubble {
   position: relative;
 }
-.blackbubble .bubble .bubbletext {
-	font-size:13px;
-	font-style: normal;
-	background: #000;
-	color: #FFF;
+
+.mocha .bubble .bubbletext {
+
+	border:2px solid #4C9116;
+
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+
+	box-shadow:0 1px 5px rgba(0, 0, 0, 0.2);
 	padding: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	border:2px solid black;
+	background: -moz-linear-gradient(90deg, #E2E0DA, #FFFFFF) repeat scroll 0 0 #77BE40;
+	
+
+	font-size:15px;
+	font-weight:300;
+	font-style: normal;
+	color: #000;
+	
 	position: relative;
 }
-.blackbubble .bubble .down .point {
+.mocha .bubble .down .point {
 	width: 0;
 	height: 0;
 	position: absolute;
-	top: 24px;
+	top: 29px;
 	left: 12px;
 	display: block;
-	border-left: 20px solid #000; 
+	border-left: 20px solid #4C9116; 
 	border-bottom: 20px solid #FFF; /* IE fix */
 	border-bottom: 20px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.blackbubble .bubble .up .point {
+.mocha .bubble .up .point {
 	width: 0;
 	height: 0;
 	position: absolute;
 	top: -33px;
 	left: 12px;
 	display: block;
-	border-left: 20px solid #000; 
+	border-left: 20px solid #005d1a; 
 	border-top: 20px solid #FFF; /* IE fix */
 	border-top: 20px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.blackbubble .bubble .point2 {
+.mocha .bubble .point2 {
 	visibility:hidden;
 	z-index:99;
 	width: 0;
@@ -73,7 +81,7 @@
 	border-bottom: 14px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.blackbubble .bubble .closer{
+.mocha .bubble .closer{
 	background:url('close_button.png');
 	display:block;
 	position:absolute;
@@ -83,14 +91,12 @@
 	cursor:pointer;
 }
 
-.blackbubble .bubble .down .closer{
+.mocha .bubble .down .closer{
 	top:-33px;
 	right:-20px;
 }
-.blackbubble .bubble .up .closer{
+.mocha .bubble .up .closer{
 	top:6px;
 	right:-20px;
 }
-
-
 

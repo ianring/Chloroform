@@ -8,6 +8,10 @@ $(document).ready(function(){
 	$('#formexample3').chloroform({
 		'onAfterValidateAll':fakesubmit
 	});
+	$('#formexample4').chloroform({
+		'onAfterValidateAll':fakesubmit,
+		'theme':'cutesy'
+	});
 	
 	
 	$( "#datepicker" ).datepicker({
@@ -31,6 +35,8 @@ $(document).ready(function(){
 	
 	$('#example-nav li a').click(function(){
 		
+		$('#bubblecontainer').addClass('hide');
+		
 		var hash = this.hash.substr(1);
 		
 		$('#example-nav li').removeClass('active');
@@ -42,6 +48,10 @@ $(document).ready(function(){
 		$('#'+hash).find('ul.nav li:first a').click();
 		return false;
 	})
+	
+	$('.nav-tabs li a').click(function(){
+		$('#bubblecontainer').addClass('hide');
+	});
 	
 });
 

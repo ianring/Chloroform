@@ -31,7 +31,6 @@ element.data contains:
 			return this.each(function(idx, elem) {
 				
 				var form = $(elem);
-				console.log(form);
 				
 				var defaults = {
 					theme: 'blackbubble', 					// default theme, blackbubble ships with chloroform
@@ -51,16 +50,15 @@ element.data contains:
 				if(options) {
 					form.data('options', $.extend({}, defaults, options));
 				}
-				console.log(form.data('options'));
 				
 				form.data('elements',[]);
 				
-				// todo: get this working with select boxes and textareas too.
+				// this should find all textareas, selects, buttons etc too.
 				var inputs = form.find(':input[' + form.data('options').validateDataAttr + ']');
 				
 				inputs.each(function(idx,elem){
 					methods.register.apply(form,[$(elem)]);
-					methods.readrules.apply(form,[$(elem)]);
+					methods.readRules.apply(form,[$(elem)]);
 				});
 				
 				// note here that the bubble is controlled by the plugin, not an instance of the plugin. This should be changed
@@ -72,7 +70,7 @@ element.data contains:
 					plugin.bubblethemer = $("<div id='bubblethemer' class=''></div>").appendTo(plugin.bubblecontainer);
 					$('	<span class="bubble" href="#"><span id="bubbledirection" class="down"><span id="bubblecloser" class="closer"></span><span class="point"></span><span class="point2"></span><span id="bubbletext" class="bubbletext">message</span></span></span>').prependTo(plugin.bubblethemer);
 					$('#bubblecloser').click(function(){
-						methods.hidebubble.apply(self);
+						methods.hideBubble.apply(self);
 					});
 				}
 				
@@ -93,7 +91,7 @@ element.data contains:
 		register: function(element){
 			var form = $(this);
 			form.data('elements').push(element);
-			methods.readrules($(element));
+			methods.readRules($(element));
 			return true;
 		},
 
@@ -115,13 +113,26 @@ element.data contains:
 			}
 			form.data('elements',newarr);
 		},
-
+		
 		/**
-		* readrules
+		* setoption
+		* sets an option on the form
+		*/
+		setOption: function(name,value){
+			var form = $(this);
+			var options = form.data('options');
+			options[name] = value;
+			form.data('options',options);
+			return true;
+		},
+		
+		
+		/**
+		* readRules
 		* given an element, will read its data-validate attribute, parse it, and build 
 		* the "rules", "arguments" and "not" data objects that are used for validation.
 		*/
-		readrules:function(element){
+		readRules:function(element){
 			$element = $(element);
 			var form = $($element.closest('form'));
 			
@@ -200,24 +211,21 @@ element.data contains:
 		* the loop breaks when it finds the first "false".
 		*/
 		validateAll: function(){
-			console.log('validateAll()');
 			var form = $(this);
-			if ($.isFunction(form.data('options').onBeforeValidateAll)){
+			if (form.data('options') && $.isFunction(form.data('options').onBeforeValidateAll)){
 				r = form.data('options').onBeforeValidateAll(form);
 				if (!r){
-					console.log('returning false from onBeforeValidateAll');
 					return false;
 				}
 			}
 			// runs the validation on all elements. aborts on the first error found.
 			var isvalid = false; // this fixes a bug in IE. strange.
 			var allValid = true;
-
-			console.log('validating '+form.data('elements').length+' elements');
+			
+//			console.log('validating '+ form.data('elements').length +' elements')
 			for(i=0;i<form.data('elements').length;i++){
-				console.log('element '+i);
-				element = form.data('elements')[i];
-				isvalid = methods.validate($(element));
+				$element = $(form.data('elements')[i]);
+				isvalid = methods.validate($element);
 				if (isvalid){
 				} else {
 					allValid = false;
@@ -227,7 +235,6 @@ element.data contains:
 			if ($.isFunction(form.data('options').onAfterValidateAll)){
 				r = form.data('options').onAfterValidateAll(form, allValid);
 				if (!r){
-					console.log('returning false from onAfterValidateAll');
 					return false;
 				}
 			}
@@ -241,41 +248,62 @@ element.data contains:
 		* "arguments" and "not" as arguments 0 and 1
 		*/
 		validate: function(element){
-			console.log('validate()');
-			var form = $(element).closest('form');
-			console.log(form);
+			$element = $(element);
+			var form = $element.closest('form');
 			if ($.isFunction(form.data('options').onBeforeValidate)){
-				r = form.data('options').onBeforeValidate(element);
+				r = form.data('options').onBeforeValidate($element);
 				if (!r){
 					return false;
 				}
 			}
-			var rules = element.data('rules');
+			var rules = $element.data('rules');
 			// evaluates all the rules, shows a bubble if necessary, and returns true or false
 			var thisisvalid = true;
 			for(rulename in rules){
 				args = [];
 				// see if there are any stored arguments for the rule
-				var storedargs = element.data('arguments');
+				var storedargs = $element.data('arguments');
 				if (storedargs && storedargs[rulename]!=undefined){
 					args = storedargs[rulename]; // an array of arguments
 				}
-				var not = element.data('not')[rulename]?true:false;
+				var not = $element.data('not')[rulename]?true:false;
 				// add element and not as the first two arguments, always
-				args = $.merge([element,not],args);
+				args = $.merge([$element,not],args);
 				
 				isvalid = rules[rulename].apply(this,args);
+				console.log(isvalid.message);
 				
 				if (isvalid.valid){
 					// do nothing.
 				} else {
-					methods.errorindicator(element,isvalid.message);
+					
+					lang = form.data('options').lang;
+					
+					console.log(typeof isvalid.message);
+					
+					if (typeof isvalid.message == 'string'){
+						if ( typeof Chloroform.i18n[lang][rulename] != 'undefined' && typeof Chloroform.i18n[lang][rulename][isvalid.message] != 'undefined'){
+							console.log('message key found in i18n');
+							message = Chloroform.i18n[lang][rulename][isvalid.message];
+						} else {
+							console.log('message key not found in i18n');
+							message = isvalid.message;
+						}
+						
+					}
+					if (typeof isvalid.message == 'object'){
+						pattern = Chloroform.i18n[lang][rulename][isvalid.message[0]];
+						args = isvalid.message.slice(1);
+						message = pattern.format(args);
+					}
+					
+					methods.errorIndicator($element,message);
 					thisisvalid = false;
 					break;
 				}
 			}
 			if ($.isFunction(form.data('options').onAfterValidate)){
-				r = form.data('options').onAfterValidate(element, thisisvalid);
+				r = form.data('options').onAfterValidate($element, thisisvalid);
 				if (!r){
 					return false;
 				}
@@ -285,52 +313,52 @@ element.data contains:
 		},
 		
 		/**
-		* errorindicator
+		* errorIndicator
 		* governs the behaviour of error messaging
 		*/
-		errorindicator: function(element,message){
+		errorIndicator: function(element,message){
 			var self = this;
 			element.focus();
 			element.select();
 			
-			methods.showbubble(element,message);
+			methods.showBubble(element,message);
 			
 			// add the keyup handler to make the bubble go away
 			element.keypress(function(){
-				methods.hidebubble();
+				methods.hideBubble();
 			});
 			// if this element is a checkbox or radio, then we react to a click
 			if (element.is(':checkbox') || element.is(':radio')){
 				element.click(function(){
-					methods.hidebubble();
+					methods.hideBubble();
 				})
 			}
 			return true;
 		},
 		
 		/**
-		* addrule
+		* addRule
 		* adds a function to the rules collection
 		*/
-		addrule: function(name,func){
+		addRule: function(name,func){
 			// todo. STUB!
 		},
 		
 		/**
-		* removerule
+		* removeRule
 		* removes a function to the rules collection
 		*/
-		removerule: function(name){
+		removeRule: function(name){
 			// todo. STUB!
 		},
 		
 		
 		
 		/**
-		* applyrule
+		* applyRule
 		* adds a rule to an element
 		*/
-		applyrule: function(element,ruleobj){
+		applyRule: function(element,ruleobj){
 			var self = this;
 			if (element.data('rules')){
 				$.merge(element.data('rules'),ruleobj);
@@ -340,28 +368,19 @@ element.data contains:
 		},
 		
 		/**
-		* revokerule
+		* revokeRule
 		* removes a rule from an element
 		*/
-		revokerule: function(element,rulename){
+		revokeRule: function(element,rulename){
 			// todo. STUB!
 		},
 		
 		/**
-		* ischildtype
-		* returns true if the element is a group of radio or checkboxes
-		*/
-		ischildtype: function(element){
-			// todo. STUB!
-		},
-		
-		
-		/**
-		* showbubble
+		* showBubble
 		* manages the visual positioning of the growler bubble
 		*/
-		showbubble : function(element,message) {
-			
+		showBubble : function(element,message) {
+		
 			var form = element.closest('form');
 			
 			var self = this;
@@ -374,42 +393,58 @@ element.data contains:
 				plugin.bubblethemer.removeClass().addClass(form.data('options').theme);
 			}
 			
-			var pos = element.offset();
+			// get the top of the element
+			$targetelem = element;
 			if ($(element.data('surrogate-element')).length > 0){
-				pos = $(element.data('surrogate-element')).offset();
+				console.log(element.data('surrogate-element'));
+				$targetelem = $(element.data('surrogate-element'));
 			}
+			var pos = $targetelem.offset();
+			pos.width = $targetelem.width();
+			pos.height = $targetelem.height();
 			
+			console.log(pos);
 			
 			if (parseInt(pos.top) < 100){
 				// pointing up
 				$("#bubbledirection").removeClass('down').addClass('up');
 				plugin.bubblecontainer.css({
 					'position':'absolute',
-					'left':pos.left,
+					'left':pos.left + (pos.width/2),
 					'top':pos.top + 46
 				});
 			} else {
 				// pointing down
+				
+				// get the height of the whole bubble, after the text is added
+//				$height = $('#bubbletext').innerHeight() + plugin.bubblecontainer.innerHeight();
+				
 				$("#bubbledirection").removeClass('up').addClass('down');
 				plugin.bubblecontainer.css({
 					'position':'absolute',
-					'left':pos.left,
-					'top':pos.top - plugin.bubblecontainer.outerHeight() - 20
+					'left':pos.left + (pos.width/2),
+					'top':pos.top - 5
 				});
 			}
+			
+			
 			if (form.data('options').scrollToBubble){
-				methods.scrolltobubble();
+				methods.scrollToBubble();
 			}
 			return true;
 		},
-		scrolltobubble:function(){
+		scrollToBubble:function(){
+			
+			var windowhalfheight = Math.floor($(window).height() / 2);
+//			alert(windowhalfheight);
+			
 			var bubbleoffset = parseInt(plugin.bubblecontainer.offset().top);
-			destination = bubbleoffset - 18;
+			destination = bubbleoffset - windowhalfheight;
 			if (destination < 0) {destination = 0;}
 			
 			$('body,html').animate({scrollTop: destination}, 800);
 		},
-		hidebubble: function(){
+		hideBubble: function(){
 			plugin.bubblecontainer.addClass('hide');
 			return true;
 		}
@@ -427,39 +462,39 @@ element.data contains:
 			// if it's a select box, something must be selected
 			if (elem.is(':radio')){
 				if (elem.is(':checked')){
-					return not?{'valid':true}:{'valid':false,'message':'this field is required'};
+					return not?{'valid':true}:{'valid':false,'message':'1'};
 				}
 			}
 			if (elem.is(':checkbox')){
 				if (elem.is(':checked')){
-					return not?{'valid':false,'message':'this field is required'}:{'valid':true};
+					return not?{'valid':false,'message':'1'}:{'valid':true};
 				} else {
-					return not?{'valid':true}:{'valid':false,'message':'this field is required'};
+					return not?{'valid':true}:{'valid':false,'message':'1'};
 				}
 			}
-			if (elem.is(':text') || elem.is(':password') || elem.is('textarea')){
+			if (elem.is(':text') || elem.is(':password') || elem.is('textarea') || elem.is(':input[type=hidden]')){
 				if (elem.val() != ''){
-					return not?{'valid':false,'message':'this field is required'}:{'valid':true};
+					return not?{'valid':false,'message':'1'}:{'valid':true};
 				} else {
-					return not?{'valid':true}:{'valid':false,'message':'this field is required'};
+					return not?{'valid':true}:{'valid':false,'message':'1'};
 				}
 			}
 			if (elem.is('select')){
 				if (elem.val() != ''){
-					return not?{'valid':false,'message':'this field is required'}:{'valid':true};
+					return not?{'valid':false,'message':'1'}:{'valid':true};
 				} else {
-					return not?{'valid':true}:{'valid':false,'message':'this field is required'};
+					return not?{'valid':true}:{'valid':false,'message':'1'};
 				}
 			}
-			return not?{'valid':false,'message':'this field is required'}:{'valid':true};
+			return not?{'valid':false,'message':'1'}:{'valid':true};
 		},
 		'equals':function(){
 			var elem = arguments[0];
 			var not = arguments[1];
 			if ($(elem).val() != value){
-				return not?{'valid':true}:{'valid':false,'message':'this field is not '+value};
+				return not?{'valid':true}:{'valid':false,'message':['1',value]};
 			}
-			return not?{'valid':false,'message':'this field is not '+value}:{'valid':true};
+			return not?{'valid':false,'message':['1',value]}:{'valid':true};
 		},
 		'sameas':function(){
 			var elem = arguments[0];
@@ -467,20 +502,20 @@ element.data contains:
 			var val1 = elem.val();
 			var val2 = $('#'+arguments[2]).val();
 			if (val1 != val2){
-				return not?{'valid':true}:{'valid':false,'message':'values are not the same'};
+				return not?{'valid':true}:{'valid':false,'message':'1'};
 			}
-			return not?{'valid':false,'message':'values must not be the same'}:{'valid':true};
+			return not?{'valid':false,'message':'2'}:{'valid':true};
 		},
 		'alpha':function(){
 			var elem = arguments[0];
 			var not = arguments[1];
-			var val = elem.val();
+			var val = elem.val().toLowerCase();
 			var regex = new RegExp(/^[a-z ._\-]*$/i);
 			var valid = regex.test(val);
 			if (!valid){
-				return not?{'valid':true}:{'valid':false,'message':'this field is not alphabetic'};
+				return not?{'valid':true}:{'valid':false,'message':'1'};
 			}
-			return not?{'valid':false,'message':'this field is not alphabetic'}:{'valid':true};
+			return not?{'valid':false,'message':'1'}:{'valid':true};
 		},
 		'numeric':function(){
 			var elem = arguments[0];
@@ -489,9 +524,9 @@ element.data contains:
 			var regex = new RegExp(/^[0-9.\-]*$/);
 			var valid = regex.test(val);
 			if (!valid){
-				return not?{'valid':true}:{'valid':false,'message':'this field is not numeric'};
+				return not?{'valid':true}:{'valid':false,'message':'1'};
 			}
-			return not?{'valid':false,'message':'this field must not be numeric'}:{'valid':true};
+			return not?{'valid':false,'message':'2'}:{'valid':true};
 		},
 		'integer':function(){
 			var elem = arguments[0];
@@ -500,9 +535,9 @@ element.data contains:
 			var regex = new RegExp(/^[0-9]*$/);
 			var valid = regex.test(val);
 			if (!valid){
-				return not?{'valid':true}:{'valid':false,'message':'this field is not an integer'};
+				return not?{'valid':true}:{'valid':false,'message':'1'};
 			}
-			return not?{'valid':false,'message':'this field must NOT be an integer'}:{'valid':true};
+			return not?{'valid':false,'message':'2'}:{'valid':true};
 		},
 		'max':function(){
 			var elem = arguments[0];
@@ -510,9 +545,9 @@ element.data contains:
 			var val = parseFloat($(elem).val());
 			var max = parseFloat(arguments[2]);
 			if (val > max){
-				return not?{'valid':true}:{'valid':false,'message':'this must be less than '+max};
+				return not?{'valid':true}:{'valid':false,'message':['1',max]};
 			}
-			return not?{'valid':false,'message':'this must NOT be less than '+max}:{'valid':true};
+			return not?{'valid':false,'message':['2',max]}:{'valid':true};
 		},
 		'min':function(){
 			var elem = arguments[0];
@@ -520,9 +555,9 @@ element.data contains:
 			var val = parseFloat($(elem).val());
 			var min = parseFloat(arguments[2]);
 			if (val < min){
-				return not?{'valid':true}:{'valid':false,'message':'this must be at least '+min};
+				return not?{'valid':true}:{'valid':false,'message':['1',min]};
 			}
-			return not?{'valid':false,'message':'this must be at least '+min}:{'valid':true};
+			return not?{'valid':false,'message':['2',min]}:{'valid':true};
 		},
 		'between':function(){
 			var elem = arguments[0];
@@ -538,9 +573,9 @@ element.data contains:
 				max = parseFloat(arguments[3]);
 			}
 			if (val < min || val > max){
-				return not?{'valid':true}:{'valid':false,'message':'this must be between '+min+' and '+max};
+				return not?{'valid':true}:{'valid':false,'message':['1',min,max]};
 			}
-			return not?{'valid':false,'message':'this must be between '+min+' and '+max}:{'valid':true};
+			return not?{'valid':false,'message':['2',min,max]}:{'valid':true};
 		},
 		'length':function(){
 			var elem = arguments[0];
@@ -551,9 +586,9 @@ element.data contains:
 				// if only one argument is provided, it's interpreted as "min"
 				var min = arguments[2];
 				if (vallen < min){
-					return not?{'valid':true}:{'valid':false,'message':'this must be at least '+min+' characters long'};
+					return not?{'valid':true}:{'valid':false,'message':['1',min]};
 				}else{
-					return not?{'valid':false,'message':'this must be at least '+min+' characters long'}:{'valid':true};
+					return not?{'valid':false,'message':['1',min]}:{'valid':true};
 				}
 			}
 			if (arguments.length == 4){
@@ -562,22 +597,21 @@ element.data contains:
 				var max = arguments[3];
 				if (vallen < min || vallen > max){
 					if (min == max){
-						return not?{'valid':true}:{'valid':false,'message':'length must be '+min};
+						return not?{'valid':true}:{'valid':false,'message':['2',min]};
 					} else {
-						return not?{'valid':true}:{'valid':false,'message':'length must be between '+min+' and '+max};
+						return not?{'valid':true}:{'valid':false,'message':['3',min,max]};
 					}
 				} else {
 					if (min == max){
-						return not?{'valid':false,'message':'length must not be '+min}:{'valid':true};
+						return not?{'valid':false,'message':['4',min]}:{'valid':true};
 					} else {
-						return not?{'valid':false,'message':'length must be between '+min+' and '+max}:{'valid':true};
+						return not?{'valid':false,'message':['3',min,max]}:{'valid':true};
 					}
 				}
 			}
 			return {'valid':true};
 		},
 		'choices':function(){
-			console.log('choices');
 			var elem = arguments[0];
 			var not = arguments[1];
 			
@@ -590,7 +624,7 @@ element.data contains:
 			if (elem.is("input:checkbox")){
 				$others = elem.closest('form').find(':input[name='+name+']');
 				if ($others.length > 1){
-					console.log($others);
+//					console.log($others);
 				}
 				for(var j=0;j<$others.length;j++){
 					if ( $($others[j]).prop('checked')){
@@ -607,7 +641,7 @@ element.data contains:
 				// if only one argument is provided, it's interpreted as "min"
 				var min = arguments[2];
 				if ($chosen < min){
-					return {'valid':false,'message':'you must choose at least '+min+' of these'};
+					return {'valid':false,'message':['1',min]};
 				}
 				return {'valid':true};
 			}
@@ -618,14 +652,14 @@ element.data contains:
 				
 				if (min == max){
 					if ($chosen < min || $chosen > max){
-						return not?{'valid':true}:{'valid':false,'message':'you must choose exactly '+min+' of these'};
+						return not?{'valid':true}:{'valid':false,'message':['2',min]};
 					}
 				} else {
 					if ($chosen < min){
-						return not?{'valid':true}:{'valid':false,'message':'you must choose at least '+min+' of these'};
+						return not?{'valid':true}:{'valid':false,'message':['3',min]};
 					}
 					if ($chosen > max){
-						return not?{'valid':true}:{'valid':false,'message':'you must choose less than '+max+' of these'};
+						return not?{'valid':true}:{'valid':false,'message':['4',max]};
 					}
 				}
 				return {'valid':true};
@@ -648,9 +682,9 @@ element.data contains:
 			var regex = new RegExp(str);
 			var valid = regex.test(val);
 			if (valid){
-				return not?{'valid':false,'message':'this field is not valid'}:{'valid':true};
+				return not?{'valid':false,'message':'1'}:{'valid':true};
 			}
-			return not?{'valid':true}:{'valid':false,'message':'this field is not valid'};
+			return not?{'valid':true}:{'valid':false,'message':'1'};
 		},
 		'email':function(){
 			var elem = arguments[0];
@@ -659,9 +693,9 @@ element.data contains:
 			var val = elem.val();
 			var valid = regex.test(val);
 			if (valid){
-				return not?{'valid':false,'message':'please enter a valid email address'}:{'valid':true};
+				return not?{'valid':false,'message':'1'}:{'valid':true};
 			}
-			return not?{'valid':true}:{'valid':false,'message':'please enter a valid email address'};
+			return not?{'valid':true}:{'valid':false,'message':'1'};
 			// stub!!
 			return {'valid':true};
 		},
@@ -692,7 +726,7 @@ element.data contains:
 				} else {
 					element = elem;
 					message = data.message;
-					form.chloroform('showbubble',element,message);
+					form.chloroform('showBubble',element,message);
 				}
 				
 			});
@@ -721,3 +755,26 @@ element.data contains:
 	};
 
 })(jQuery);
+
+if (typeof Chloroform == 'undefined'){
+	Chloroform = {};
+}
+if (typeof Chloroform.i18n == 'undefined'){
+	Chloroform.i18n = {};
+}
+if (typeof Chloroform.i18n.en == 'undefined'){
+	Chloroform.i18n.en = {};
+}
+
+if (!String.prototype.format){
+	String.prototype.format = function() {
+		var args = arguments[0];
+		
+		return this.replace(/{(\d+)}/g,function(match,number){
+			return typeof args[number] != 'undefined'
+				? args[number]
+				: match
+			;
+		});
+	};
+}

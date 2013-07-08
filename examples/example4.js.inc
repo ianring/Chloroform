@@ -1,6 +1,4 @@
-jQuery(document).ready(function($) {
-	$('#example4').chloroform();
-});
+$('#example4').chloroform();
 
 function customrule1(element,not){
 	$val = element.val();

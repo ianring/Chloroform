@@ -51,11 +51,6 @@
 			<td><input type="text" id="field5" data-validate="!sameas(password1)" value="qqqqqq"/></td>
 		</tr>
 		<tr>
-			<td>custom1</td>
-			<td>must be "123"</td>
-			<td><input type="text" id="field6" data-validate="custom1" value="123"/></td>
-		</tr>
-		<tr>
 			<td>required</td>
 			<td>must be checked</td>
 			<td><input type="checkbox" id="field7" data-validate="required" value="abc" checked="checked"/></td>

@@ -1,4 +1,4 @@
-<form id="myform">
+<form id="example10">
 
 	Check this box:
 	<input type="checkbox" data-validate="required" />
