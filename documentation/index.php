@@ -33,9 +33,9 @@
 	<div class="row">
 		<div class="span3">
 		
-		<ul>
+		<ul id="nav" class="nav nav-tabs nav-stacked">
 			<li><a href="#gettingstarted">Getting Started</a>
-				<ul>
+				<ul class="nav nav-pills nav-stacked">
 					<li><a href="#invertingarule">Inverting a Rule</a></li>
 					<li><a href="#ruleswitharguments">Rules with arguments</a></li>
 					<li><a href="#multiplerules">Multiple Rules</a></li>
@@ -43,7 +43,7 @@
 			</li>
 			
 			<li><a href="#options">Options</a>
-				<ul>
+				<ul class="nav nav-pills nav-stacked">
 					<li><a href="#optionslang">lang</a></li>
 					<li><a href="#optionstheme">theme</a></li>
 					<li><a href="#optionsvalidatedataattr">validateDataAttr</a></li>
@@ -51,7 +51,7 @@
 				</ul>
 			</li>
 			<li><a href="#publicmethods">Public Methods</a>
-				<ul>
+				<ul class="nav nav-pills nav-stacked">
 					<li><a href="#publicmethodsregister">register</a></li>
 					<li><a href="#publicmethodsunregister">unregister</a></li>
 					<li><a href="#publicmethodsvalidate">validate</a></li>
@@ -63,12 +63,12 @@
 			</li>
 			<li><a href="#builtinrules">Built-in Rules</a></li>
 			<li><a href="#customrules">Custom Rules</a>
-				<ul>
+				<ul class="nav nav-pills nav-stacked">
 					<li><a href="#customrulesauthoring">Authoring a Custom Validation Rule</a></li>
 				</ul>
 			</li>
 			<li><a href="#callbacks">Callback Functions</a>
-				<ul>
+				<ul class="nav nav-pills nav-stacked">
 					<li><a href="#onbeforevalidateall">onBeforeValidateAll</a></li>
 					<li><a href="#onaftervalidateall">onAfterValidateAll</a></li>
 					<li><a href="#onbeforevalidate">onBeforeValidate</a></li>
@@ -76,7 +76,7 @@
 				</ul>
 			</li>
 			<li><a href="#datacollections">Data Collections</a>
-				<ul>
+				<ul class="nav nav-pills nav-stacked">
 					<li><a href="#dataoptions">form.data('options')</a></li>
 					<li><a href="#dataelements">form.data('elements')</a></li>
 					<li><a href="#datarules">input.data('rules')</a></li>
