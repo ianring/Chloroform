@@ -6,56 +6,45 @@
 	width:5px;
 	height:5px;
 	position:absolute;
-	border:1px solid #666;
-	background:red;
 }
 
-.mocha{
+.earthygreen{
   display: block;
-  left: -11px;
+  left: -10px;
   position: relative;
-  top: -48px;
+  top: -42px;
   width: 300px;	
 }
 
 /**** Speech Bubble Icons *****/
-.mocha .bubble {
+.earthygreen .bubble {
   position: relative;
 }
-
-.mocha .bubble .bubbletext {
-
-	border:2px solid #4C9116;
-
-	border-radius: 6px;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-
-	box-shadow:0 1px 5px rgba(0, 0, 0, 0.2);
-	padding: 10px;
-	background: -moz-linear-gradient(90deg, #E2E0DA, #FFFFFF) repeat scroll 0 0 #77BE40;
-	
-
-	font-size:15px;
-	font-weight:300;
+.earthygreen .bubble .bubbletext {
+	font-size:13px;
 	font-style: normal;
-	color: #000;
-	
+	background: #8fa987;
+	color: #FFF;
+	padding: 10px;
+	-moz-border-radius: 18px;
+	-webkit-border-radius: 18px;
+	border-radius: 18px;
+	border:4px solid #005d1a;
 	position: relative;
 }
-.mocha .bubble .down .point {
+.earthygreen .bubble .down .point {
 	width: 0;
 	height: 0;
 	position: absolute;
-	top: 29px;
+	top: 24px;
 	left: 12px;
 	display: block;
-	border-left: 20px solid #4C9116; 
+	border-left: 20px solid #005d1a; 
 	border-bottom: 20px solid #FFF; /* IE fix */
 	border-bottom: 20px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.mocha .bubble .up .point {
+.earthygreen .bubble .up .point {
 	width: 0;
 	height: 0;
 	position: absolute;
@@ -67,7 +56,7 @@
 	border-top: 20px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.mocha .bubble .point2 {
+.earthygreen .bubble .point2 {
 	visibility:hidden;
 	z-index:99;
 	width: 0;
@@ -81,7 +70,7 @@
 	border-bottom: 14px solid rgba(0,0,0,0); 
 	overflow: hidden; /* IE fix */
 }
-.mocha .bubble .closer{
+.earthygreen .bubble .closer{
 	background:url('close_button.png');
 	display:block;
 	position:absolute;
@@ -91,11 +80,11 @@
 	cursor:pointer;
 }
 
-.mocha .bubble .down .closer{
+.earthygreen .bubble .down .closer{
 	top:-33px;
 	right:-20px;
 }
-.mocha .bubble .up .closer{
+.earthygreen .bubble .up .closer{
 	top:6px;
 	right:-20px;
 }
