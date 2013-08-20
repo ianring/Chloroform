@@ -157,7 +157,7 @@ element.data contains:
 			/*
 			an actionsStr might look like these:
 
-			"contains(3,4);regex(/[a-z]{0-9}/)"
+			"contains(3,4);regex([a-z]{0-9})"
 
 			this function must be capable of parsing something that complicated
 			
@@ -190,7 +190,7 @@ element.data contains:
 						$element.data('rules')[rulename] = window[rulename];
 						$element.data('arguments')[rulename] = argarray;
 					} else {
-						// if the rule isn't recognized or defined, we treat the entire attribute as a regex (buggy!)
+						// if the rule isn't recognized or defined, we treat the entire attribute as a regex (@todo: this is still buggy!)
 						rulename = 'regex';
 						$element.data('rules')[rulename] = rules[rulename];
 						argarray = [];
@@ -222,7 +222,6 @@ element.data contains:
 			var isvalid = false; // this fixes a bug in IE. strange.
 			var allValid = true;
 			
-//			console.log('validating '+ form.data('elements').length +' elements')
 			for(i=0;i<form.data('elements').length;i++){
 				$element = $(form.data('elements')[i]);
 				isvalid = methods.validate($element);
@@ -271,7 +270,6 @@ element.data contains:
 				args = $.merge([$element,not],args);
 				
 				isvalid = rules[rulename].apply(this,args);
-				console.log(isvalid.message);
 				
 				if (isvalid.valid){
 					// do nothing.
@@ -279,14 +277,10 @@ element.data contains:
 					
 					lang = form.data('options').lang;
 					
-					console.log(typeof isvalid.message);
-					
 					if (typeof isvalid.message == 'string'){
 						if ( typeof Chloroform.i18n[lang][rulename] != 'undefined' && typeof Chloroform.i18n[lang][rulename][isvalid.message] != 'undefined'){
-							console.log('message key found in i18n');
 							message = Chloroform.i18n[lang][rulename][isvalid.message];
 						} else {
-							console.log('message key not found in i18n');
 							message = isvalid.message;
 						}
 						
@@ -396,14 +390,11 @@ element.data contains:
 			// get the top of the element
 			$targetelem = element;
 			if ($(element.data('surrogate-element')).length > 0){
-				console.log(element.data('surrogate-element'));
 				$targetelem = $(element.data('surrogate-element'));
 			}
 			var pos = $targetelem.offset();
 			pos.width = $targetelem.width();
 			pos.height = $targetelem.height();
-			
-			console.log(pos);
 			
 			if (parseInt(pos.top) < 100){
 				// pointing up
@@ -678,7 +669,6 @@ element.data contains:
 			var not = arguments[1];
 			var str = arguments[2];
 			var val = elem.val();
-			
 			var regex = new RegExp(str);
 			var valid = regex.test(val);
 			if (valid){

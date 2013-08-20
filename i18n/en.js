@@ -5,6 +5,22 @@ if (typeof Chloroform.i18n == 'undefined'){
 	Chloroform.i18n = {};
 }
 
+/**
+*
+*    Adding your own translated phrases is easy!
+*
+*    The Chloroform.i18n object contains an object named after the language, e.g. "en" or "fr" or "es
+*    Inside that, there are keys for the rule name. Every rule has a name. If you're defining i18n for a 
+*    custom function, then you use the function name.
+*
+*    Inside that, you create key:value pairs containing your translated phrases.
+*    A number in curly brackets is a substitution placeholder, sort of like you'd see in a regular expression or a sprinf.
+*    {0} accepts the value of the first argument, {1} is the second, and so on.
+*
+*    Go take a look at some of the examples at chloroform.gralix.com, and you'll see that it makes sense.
+*
+*/
+
 Chloroform.i18n.en = {
 	'required':{
 		'1':'this field is required'
